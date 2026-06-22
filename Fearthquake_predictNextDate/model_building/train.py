@@ -85,7 +85,7 @@ def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kme
     df['time'] = pd.to_datetime(df['time'], errors='coerce')
 
 # 2. Rebuild the grid map while explicitly retaining the string date
-    grid_map_spatial = df.sort_values('time').groupby('grid_id').last().reset_index()
+    #grid_map_spatial = df.sort_values('time').groupby('grid_id').last().reset_index()
     #below newly added,Hasil
     current_state['time']=df.sort_values('time').groupby('grid_id').last().reset_index()['time'].iloc[-1]
 
