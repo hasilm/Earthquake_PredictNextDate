@@ -158,9 +158,10 @@ Xtest.to_csv("Xtest.csv",index=False)
 ytrain.to_csv("ytrain.csv",index=False)
 ytest.to_csv("ytest.csv",index=False)
 y_mag.to_csv("ymag.csv",index=False)
+df.to_csv("df.csv",index=False)
 
 
-files = ["Xtrain.csv","Xtest.csv","ytrain.csv","ytest.csv","ymag.csv","X_spatial.csv","y_days.csv"]
+files = ["Xtrain.csv","Xtest.csv","ytrain.csv","ytest.csv","ymag.csv","X_spatial.csv","y_days.csv","df.csv"]
 
 
 for file_path in files:
