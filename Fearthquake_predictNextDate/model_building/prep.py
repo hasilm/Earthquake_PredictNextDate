@@ -146,3 +146,20 @@ y_mag = df['mag']
 #only days prediction data is split with training/test
 Xtrain, Xtest, ytrain, ytest = train_test_split(X_spatial, y_days, test_size=0.2, random_state=42)
  
+Xtrain.to_csv("Xtrain.csv",index=False)
+Xtest.to_csv("Xtest.csv",index=False)
+ytrain.to_csv("ytrain.csv",index=False)
+ytest.to_csv("ytest.csv",index=False)
+y_mag.to_csv("ymag.csv",index=False)
+
+
+files = ["Xtrain.csv","Xtest.csv","ytrain.csv","ytest.csv","ymag.csv"]
+
+
+for file_path in files:
+    api.upload_file(
+        path_or_fileobj=file_path,
+        path_in_repo=file_path.split("/")[-1],  # just the filename
+        repo_id=str(HF_username)+"/"+str(App_name),                                           # enter the Hugging Face username here
+        repo_type="dataset",
+    )
