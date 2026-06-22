@@ -16,6 +16,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import RandomizedSearchCV
+# for hugging face space authentication to upload files
+from huggingface_hub import login, HfApi
+
+# Define constants for the dataset and output paths
+api = HfApi(token=os.getenv("HF_TOKEN"))
 
 Folder_name="Fearthquake_predictNextDate"
 HF_username="hasilm1"
