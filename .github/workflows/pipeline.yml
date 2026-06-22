@@ -15,8 +15,7 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: python Fearthquake_predictNextDate/model_building/data_register.py
-      - name: Install dependencies
-        run:  pip install xgboost    
+    
 
   data-prep:
     needs: register-dataset
@@ -42,7 +41,8 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: python Fearthquake_predictNextDate/model_building/train.py
-
+      - name: Install dependencies
+        run:  pip install xgboost 
 
   deploy-hosting:
     runs-on: ubuntu-latest
