@@ -63,6 +63,11 @@ model_mag_spatial.fit(X_spatial, y_mag)
 
 # Save the final reference map snapshot
 grid_map_spatial = df.sort_values('time').groupby('grid_id').last().reset_index()
+pure_spatial_features = [
+    'latitude', 'longitude', 
+    'spatial_cluster_id', 'distance_to_center', 'spatial_cluster_density',
+    'days_since_last_local', 'avg_local_gap', 'gap_acceleration' # Core sequence tracking
+]
 grid_map_spatial = grid_map_spatial[pure_spatial_features]
 
 def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kmeans_obj, model_time, model_intensity, steps=3):
