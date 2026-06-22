@@ -5,7 +5,7 @@ import joblib
 
 Folder_name="Fearthquake_predictNextDate"
 HF_username="hasilm1"
-App_name="Earthquake_PredictNextDate"
+App_name="earthquake_predictNextDate"
 
 Model_name1="earthquake_predict_date_model_v1.joblib"
 Model_name2="earthquake_predict_mag_model_v1.joblib"
