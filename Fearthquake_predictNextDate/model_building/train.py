@@ -35,10 +35,18 @@ ytrain_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/ytrain.csv" 
 ytest_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/ytest.csv"                      # enter the Hugging Face username here
 ymag_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/ymag.csv"                      # enter the Hugging Face username here
 
-X_spatial = pd.read_csv(Xtrain_path)
+
+X_spatial_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/X_spatial.csv"                    # enter the Hugging Face username here
+y_days_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/y_days.csv"                      # enter the Hugging Face username here
+
+Xtrain = pd.read_csv(Xtrain_path)
 Xtest = pd.read_csv(Xtest_path)
-y_days = pd.read_csv(ytrain_path)
+X_spatial = pd.read_csv(X_spatial_path)
+
+y_days = pd.read_csv(y_days_path)
 ytest = pd.read_csv(ytest_path)
+ytrain = pd.read_csv(ytrain_path)
+
 y_mag = pd.read_csv(ymag_path)
 
 # Train Spatial Timeline Model
