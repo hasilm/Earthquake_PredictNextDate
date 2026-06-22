@@ -26,7 +26,7 @@ Test_size=0.2
 Random_state=42
 data_filename="earthquakes.csv"
 
-DATASET_PATH = "/content/"+str(data_filename)                  # enter the Hugging Face username here
+DATASET_PATH = "/data/"+str(data_filename)                  # enter the Hugging Face username here
 df = pd.read_csv(DATASET_PATH)
 print("Dataset loaded successfully.")
 #df = df.drop(columns=['id'])
