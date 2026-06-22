@@ -32,6 +32,8 @@ longitude = st.number_input("longitude", min_value=-180, max_value=+180, value=-
 #34.239°N 25.124°E
 #40.911°N 47.761°E
 #42.360°N 126.573°W
+spatial_kmeans = KMeans(n_clusters=25, random_state=42, n_init='auto')
+
 predict_pure_spatial_timeline(
     input_lat=latitude,
     input_lon=longitude,
