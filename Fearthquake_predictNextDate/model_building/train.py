@@ -233,3 +233,33 @@ Model_name2="earthquake_predict_mag_model_v1.joblib"
 # Save best model
 joblib.dump(model_days_spatial, Model_name1)
 joblib.dump(model_mag_spatial, Model_name2)
+
+# Upload to Hugging Face
+repo_id = str(HF_username)+"/"+str(App_name)                                         # enter the Hugging Face username here
+repo_type = "model"
+
+api = HfApi(token=os.getenv("HF_TOKEN"))
+
+# Step 1: Check if the space exists
+try:
+    api.repo_info(repo_id=repo_id, repo_type=repo_type)
+    print(f"Model Space '{repo_id}' already exists. Using it.")
+except RepositoryNotFoundError:
+    print(f"Model Space '{repo_id}' not found. Creating new space...")
+    create_repo(repo_id=repo_id, repo_type=repo_type, private=False)
+    print(f"Model Space '{repo_id}' created.")
+
+# create_repo("best_machine_failure_model", repo_type="model", private=False)
+api.upload_file(
+    path_or_fileobj=Model_name1,
+    path_in_repo=Model_name1,
+    repo_id=repo_id,
+    repo_type=repo_type,
+)
+# create_repo("best_machine_failure_model", repo_type="model", private=False)
+api.upload_file(
+    path_or_fileobj=Model_name2,
+    path_in_repo=Model_name2,
+    repo_id=repo_id,
+    repo_type=repo_type,
+)
