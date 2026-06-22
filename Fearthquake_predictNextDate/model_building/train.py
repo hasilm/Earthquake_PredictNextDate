@@ -48,7 +48,7 @@ ytest = pd.read_csv(ytest_path)
 ytrain = pd.read_csv(ytrain_path)
 
 y_mag = pd.read_csv(ymag_path)
-df=X_spatial
+df=Xtrain
 
 # Train Spatial Timeline Model
 model_days_spatial = XGBRegressor(n_estimators=400, max_depth=6, learning_rate=0.03, random_state=42)
