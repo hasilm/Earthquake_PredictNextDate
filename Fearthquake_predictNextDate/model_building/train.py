@@ -22,6 +22,25 @@ from sklearn.model_selection import RandomizedSearchCV
  
 from xgboost import XGBRegressor
 
+from huggingface_hub import login, HfApi, create_repo
+from huggingface_hub.utils import RepositoryNotFoundError, HfHubHTTPError
+
+api = HfApi()
+HF_username="hasilm1"
+App_name="Earthquake_PredictNextDate"
+
+Xtrain_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/Xtrain.csv"                    # enter the Hugging Face username here
+Xtest_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/Xtest.csv"                      # enter the Hugging Face username here
+ytrain_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/ytrain.csv"                    # enter the Hugging Face username here
+ytest_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/ytest.csv"                      # enter the Hugging Face username here
+ymag_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/ymag.csv"                      # enter the Hugging Face username here
+
+X_spatial = pd.read_csv(Xtrain_path)
+Xtest = pd.read_csv(Xtest_path)
+y_days = pd.read_csv(ytrain_path)
+ytest = pd.read_csv(ytest_path)
+y_mag = pd.read_csv(ymag_path)
+
 # Train Spatial Timeline Model
 model_days_spatial = XGBRegressor(n_estimators=400, max_depth=6, learning_rate=0.03, random_state=42)
 model_days_spatial.fit(X_spatial, y_days)
