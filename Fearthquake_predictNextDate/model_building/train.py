@@ -39,6 +39,8 @@ ymag_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/ymag.csv"     
 X_spatial_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/X_spatial.csv"                    # enter the Hugging Face username here
 y_days_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/y_days.csv"                      # enter the Hugging Face username here
 
+df_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/df.csv"                      # enter the Hugging Face username here
+
 Xtrain = pd.read_csv(Xtrain_path)
 Xtest = pd.read_csv(Xtest_path)
 X_spatial = pd.read_csv(X_spatial_path)
@@ -46,9 +48,10 @@ X_spatial = pd.read_csv(X_spatial_path)
 y_days = pd.read_csv(y_days_path)
 ytest = pd.read_csv(ytest_path)
 ytrain = pd.read_csv(ytrain_path)
+get_df = pd.read_csv(df_path)
 
 y_mag = pd.read_csv(ymag_path)
-df=Xtrain
+df=get_df
 
 # Train Spatial Timeline Model
 model_days_spatial = XGBRegressor(n_estimators=400, max_depth=6, learning_rate=0.03, random_state=42)
