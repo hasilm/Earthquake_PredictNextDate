@@ -37,12 +37,13 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install Dependencies
         run: pip install -r Fearthquake_predictNextDate/requirements.txt
+      - name: Install dependencies
+        run:  pip install xgboost 
       - name: Model Building
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: python Fearthquake_predictNextDate/model_building/train.py
-      - name: Install dependencies
-        run:  pip install xgboost 
+
 
   deploy-hosting:
     runs-on: ubuntu-latest
