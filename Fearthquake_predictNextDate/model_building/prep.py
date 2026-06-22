@@ -24,7 +24,7 @@ api = HfApi(token=os.getenv("HF_TOKEN"))
 
 Folder_name="Fearthquake_predictNextDate"
 HF_username="hasilm1"
-App_name="Earthquake_PredictNextDate"
+App_name="earthquake_predictNextDate"
 Column_name='latitude'
 Column_name2='longitude'
 Test_size=0.2
