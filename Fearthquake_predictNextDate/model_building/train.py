@@ -179,15 +179,15 @@ def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kme
 #34.239°N 25.124°E
 #40.911°N 47.761°E
 #42.360°N 126.573°W
-predict_pure_spatial_timeline(
-    input_lat=34.05,
-    input_lon=-118.24,
-    historical_grid_map=grid_map_spatial,
-    kmeans_obj=spatial_kmeans,
-    model_time=model_days_spatial,
-    model_intensity=model_mag_spatial,
-    steps=3
-)
+#predict_pure_spatial_timeline(
+#    input_lat=34.05,
+#    input_lon=-118.24,
+#    historical_grid_map=grid_map_spatial,
+#    kmeans_obj=spatial_kmeans,
+#    model_time=model_days_spatial,
+#    model_intensity=model_mag_spatial,
+#    steps=3
+#)
 
 #X_spatial, y_days
 
