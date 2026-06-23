@@ -158,9 +158,9 @@ def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kme
 
         det+="\n\n Forecasted Event :"+str(i)
         print(f"Forecasted Event #{i}:")
-        det+="\nDate:"+str(future_date.strftime('%Y-%m-%d'))+" "+str(safe_days)+" days "
+        det+="\n Date:"+str(future_date.strftime('%Y-%m-%d'))+" "+str(safe_days)+" days "
         print(f"  -> Date: {future_date.strftime('%Y-%m-%d')} (Interval: {safe_days} days)")
-        det+="\nPredicted Intensity: "+str(pred_mag)
+        det+="\n Predicted Intensity: "+str(pred_mag)
         print(f"  -> Predicted Intensity: {pred_mag:.2f}")
         print()
 
