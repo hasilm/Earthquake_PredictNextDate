@@ -14,7 +14,7 @@ if root_dir not in sys.path:
     sys.path.append(root_dir)
 
 # Now you can safely import your function
-from model_training.train import predict_pure_spatial_timeline
+from model_building.train import predict_pure_spatial_timeline
 
 Folder_name="Fearthquake_predictNextDate"
 HF_username="hasilm1"
