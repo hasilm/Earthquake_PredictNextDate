@@ -1,17 +1,15 @@
+import os
+import sys
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.append(current_dir)
+    
 import streamlit as st
 import pandas as pd
 from huggingface_hub import hf_hub_download
 import joblib
 from sklearn.cluster import KMeans
 from xgboost import XGBRegressor
-
-import os
-import sys
-
-# Get the absolute path of the directory 1 level above 'proto' (the root folder)
-root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-if root_dir not in sys.path:
-    sys.path.append(root_dir)
 
 # Now you can safely import your function
 from model_building.train import predict_pure_spatial_timeline
