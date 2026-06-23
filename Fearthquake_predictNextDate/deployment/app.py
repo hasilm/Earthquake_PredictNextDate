@@ -4,6 +4,7 @@ from huggingface_hub import hf_hub_download
 import joblib
 from sklearn.cluster import KMeans
 from xgboost import XGBRegressor
+from train import predict_pure_spatial_timeline
 
 Folder_name="Fearthquake_predictNextDate"
 HF_username="hasilm1"
