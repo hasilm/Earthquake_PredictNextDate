@@ -156,11 +156,11 @@ def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kme
         # Predict Magnitude strictly using the spatial pattern identity
         pred_mag = float(model_intensity.predict(input_features).item())
 
-        det+="Forecasted Event :"+str(i)
+        det+="\n\n Forecasted Event :"+str(i)
         print(f"Forecasted Event #{i}:")
-        det+="Date:"+str(future_date.strftime('%Y-%m-%d'))+" "+str(safe_days)+" days "
+        det+="\nDate:"+str(future_date.strftime('%Y-%m-%d'))+" "+str(safe_days)+" days "
         print(f"  -> Date: {future_date.strftime('%Y-%m-%d')} (Interval: {safe_days} days)")
-        det+="Predicted Intensity: "+str(pred_mag)
+        det+="\nPredicted Intensity: "+str(pred_mag)
         print(f"  -> Predicted Intensity: {pred_mag:.2f}")
         print()
 
