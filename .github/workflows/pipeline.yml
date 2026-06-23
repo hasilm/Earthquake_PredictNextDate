@@ -38,7 +38,7 @@ jobs:
       - name: Install Dependencies
         run: pip install -r Fearthquake_predictNextDate/requirements.txt
       - name: Install dependencies
-        run:  pip install xgboost 
+        run:  pip install xgboost==2.0.0
       - name: Model Building
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
