@@ -3,7 +3,6 @@ import pandas as pd
 from huggingface_hub import hf_hub_download
 import joblib
 from sklearn.cluster import KMeans
-!pip install xgboost==2.0.0
 from xgboost import XGBRegressor
 
 Folder_name="Fearthquake_predictNextDate"
