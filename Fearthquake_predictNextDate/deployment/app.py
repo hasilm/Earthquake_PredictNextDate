@@ -7,8 +7,6 @@ from xgboost import XGBRegressor
 import numpy as np
 
 # Now you can safely import your function
-#from model_building.train import predict_pure_spatial_timeline
-
 Folder_name="Fearthquake_predictNextDate"
 HF_username="hasilm1"
 App_name="earthquake_predictNextDate"
@@ -115,6 +113,7 @@ def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kme
     print(f"Distance to Cluster Core Centroid: {dist_to_center:.4f} degrees")
     print(f"Baseline Event Reference Date:   {current_date_ts}\n")
 
+    det=""
     # 3. Pure Spatial Recursive Simulation Loop
     for i in range(1, steps + 1):
         input_features = pd.DataFrame([{
@@ -157,8 +156,11 @@ def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kme
         # Predict Magnitude strictly using the spatial pattern identity
         pred_mag = float(model_intensity.predict(input_features).item())
 
+        det+="Forecasted Event :"+str(i)
         print(f"Forecasted Event #{i}:")
+        det+="Date:"+str(future_date.strftime('%Y-%m-%d'))+" "+str(safe_days)+" days "
         print(f"  -> Date: {future_date.strftime('%Y-%m-%d')} (Interval: {safe_days} days)")
+        det+="Predicted Intensity: "+str(pred_mag)
         print(f"  -> Predicted Intensity: {pred_mag:.2f}")
         print()
 
@@ -168,6 +170,8 @@ def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kme
         last_gap = float(safe_days)
         avg_local_gap = (avg_local_gap * 2 + safe_days) / 3
 
+    return det
+    
 # Execute pure spatial forecast
 #print(predict_next_quake_date(34.05, -118.24, "2026-06-18"))
 #34.239°N 25.124°E
