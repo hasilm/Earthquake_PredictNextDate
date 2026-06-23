@@ -35,6 +35,16 @@ longitude = st.number_input("longitude", min_value=-180.0, max_value=+180.0, val
 df_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/df.csv"                      # enter the Hugging Face username here
 df = pd.read_csv(df_path)
 
+spatial_kmeans = KMeans(n_clusters=25, random_state=42, n_init='auto')
+df['spatial_cluster_id'] = spatial_kmeans.fit_predict(df[['latitude', 'longitude']])
+
+# 2. Calculate Distance to Cluster Center (Centroid)
+# This lets the model know if a point is in the core of a spatial pattern or on the fringe
+centroids = spatial_kmeans.cluster_centers_
+df['distance_to_center'] = np.sqrt(
+    (df['latitude'] - centroids[df['spatial_cluster_id'], 0])**2 + 
+    (df['longitude'] - centroids[df['spatial_cluster_id'], 1])**2
+)
 
 # 3. Calculate Local Spatial Density Pattern
 # Counts how many total historical events share this exact geometric cluster assignment
@@ -168,7 +178,7 @@ def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kme
 #34.239°N 25.124°E
 #40.911°N 47.761°E
 #42.360°N 126.573°W
-spatial_kmeans = KMeans(n_clusters=25, random_state=42, n_init='auto')
+#spatial_kmeans = KMeans(n_clusters=25, random_state=42, n_init='auto')
 
 predict_pure_spatial_timeline(
     input_lat=latitude,
