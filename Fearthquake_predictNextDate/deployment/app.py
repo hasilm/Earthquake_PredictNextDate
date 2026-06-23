@@ -33,7 +33,7 @@ latitude = st.number_input("latitude", min_value=-90.0, max_value=+90.0, value=3
 longitude = st.number_input("longitude", min_value=-180.0, max_value=+180.0, value=-118.24)
 
 df_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/df.csv"                      # enter the Hugging Face username here
-get_df = pd.read_csv(df_path)
+df = pd.read_csv(df_path)
 
 grid_map_spatial = df.sort_values('time').groupby('grid_id').last().reset_index()
 pure_spatial_features = [
