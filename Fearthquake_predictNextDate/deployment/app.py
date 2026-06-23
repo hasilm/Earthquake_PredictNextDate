@@ -35,6 +35,16 @@ longitude = st.number_input("longitude", min_value=-180.0, max_value=+180.0, val
 df_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/df.csv"                      # enter the Hugging Face username here
 df = pd.read_csv(df_path)
 
+
+# 3. Calculate Local Spatial Density Pattern
+# Counts how many total historical events share this exact geometric cluster assignment
+cluster_density = df['spatial_cluster_id'].value_counts().to_dict()
+df['spatial_cluster_density'] = df['spatial_cluster_id'].map(cluster_density)
+
+# Ensure data is sorted chronologically within its geographical grid framework
+df['grid_id'] = df['latitude'].round(1).astype(str) + "_" + df['longitude'].round(1).astype(str)
+df = df.sort_values(['grid_id', 'time']).reset_index(drop=True)
+
 grid_map_spatial = df.sort_values('time').groupby('grid_id').last().reset_index()
 pure_spatial_features = [
     'latitude', 'longitude', 
