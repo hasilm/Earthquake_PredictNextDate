@@ -26,8 +26,8 @@ Please enter the data below to get a prediction.
 """)
 
 # User inputs
-latitude = st.number_input("latitude", min_value=-90, max_value=+90, value=34.05)
-longitude = st.number_input("longitude", min_value=-180, max_value=+180, value=-118.24)
+latitude = st.number_input("latitude", min_value=-90.0, max_value=+90.0, value=34.05)
+longitude = st.number_input("longitude", min_value=-180.0, max_value=+180.0, value=-118.24)
 
 # Execute pure spatial forecast
 #print(predict_next_quake_date(34.05, -118.24, "2026-06-18"))
