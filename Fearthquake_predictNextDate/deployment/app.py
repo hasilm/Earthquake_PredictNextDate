@@ -4,6 +4,7 @@ from huggingface_hub import hf_hub_download
 import joblib
 from sklearn.cluster import KMeans
 from xgboost import XGBRegressor
+import numpy as np
 
 # Now you can safely import your function
 #from model_building.train import predict_pure_spatial_timeline
