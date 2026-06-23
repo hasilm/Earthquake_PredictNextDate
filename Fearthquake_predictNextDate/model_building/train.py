@@ -20,7 +20,6 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import RandomizedSearchCV
  
-!pip install xgboost==2.0.0
 from xgboost import XGBRegressor
 
 from huggingface_hub import login, HfApi, create_repo
