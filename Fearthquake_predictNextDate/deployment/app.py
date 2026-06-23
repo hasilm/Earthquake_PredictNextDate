@@ -4,7 +4,17 @@ from huggingface_hub import hf_hub_download
 import joblib
 from sklearn.cluster import KMeans
 from xgboost import XGBRegressor
-from train import predict_pure_spatial_timeline
+
+import os
+import sys
+
+# Get the absolute path of the directory 1 level above 'proto' (the root folder)
+root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if root_dir not in sys.path:
+    sys.path.append(root_dir)
+
+# Now you can safely import your function
+from deployment.train import predict_pure_spatial_timeline
 
 Folder_name="Fearthquake_predictNextDate"
 HF_username="hasilm1"
