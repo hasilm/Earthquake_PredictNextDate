@@ -80,29 +80,7 @@ else:
     text1 = st.text_input("Enter Latitude", value="")
     text2 = st.text_input("Enter Longitude", value="")
 
-# 6. Action Submission Button
-if st.button("Submit to API"):
-    st.markdown("### API Response")
-    
-    if choice == "address":
-        if not text1.strip():
-            st.warning("Please type a valid address before submitting.")
-        else:
-            with st.spinner("Geocoding address..."):
-                latitude, longitude = convertToLatLon(text1)
-            st.success(f"**Mode:** Address Lookup")
-            st.write(f"**Address Entered:** {text1}")
-            st.write(f"**Result Lat/Lon:** {latitude}, {longitude}")
-            st.write(f"**Dataset Rows Loaded:** {len(dataset)}")
-    else:
-        if not text1.strip() or not text2.strip():
-            st.warning("Please enter both Latitude and Longitude values.")
-        else:
-            st.success(f"**Mode:** Manual Coordinates")
-            st.write(f"**Latitude:** {text1}")
-            st.write(f"**Longitude:** {text2}")
-            st.write(f"**Dataset Rows Loaded:** {len(dataset)}")
-
+ 
 #latitude = st.number_input("latitude", min_value=-90.0, max_value=+90.0, value=34.05)
 #longitude = st.number_input("longitude", min_value=-180.0, max_value=+180.0, value=-118.24)
 
@@ -596,18 +574,51 @@ def formatOutput(lat,lon,det):
     ret+="##########################################"
 
 # Prediction button
-if st.button("Predict "):
-    det=predict_pure_spatial_timeline(
-    input_lat=latitude,
-    input_lon=longitude,
-    historical_grid_map=grid_map_spatial,
-    kmeans_obj=spatial_kmeans,
-    model_time=model_days,
-    model_intensity=model_mag,
-    steps=3)
+#if st.button("Predict "):
+#    det=predict_pure_spatial_timeline(
+#    input_lat=latitude,
+#    input_lon=longitude,
+#    historical_grid_map=grid_map_spatial,
+#    kmeans_obj=spatial_kmeans,
+#    model_time=model_days,
+#    model_intensity=model_mag,
+#    steps=3)
     
     #lat,lon=convertToLatLon(address)
-    dets=formatOutput(lat,lon)
+#    dets=formatOutput(lat,lon)
     
-    st.subheader("Prediction Result:")
-    st.success(f"The model predict: **{dets}**")
+#    st.subheader("Prediction Result:")
+#    st.success(f"The model predict: **{dets}**")
+
+# 6. Action Submission Button
+if st.button("click to predict"):
+    st.markdown("AI Prediction Date Response")
+
+    lat=0.0
+    longi=0.0
+    if choice == "address":
+        if not text1.strip():
+            st.warning("Please type a valid address before submitting.")
+        else:
+            with st.spinner("Geocoding address..."):
+                latitude, longitude = convertToLatLon(text1)
+            st.success(f"**Mode:** Address Lookup")
+            st.write(f"**Address Entered:** {text1}")
+            st.write(f"**Result Lat/Lon:** {latitude}, {longitude}")
+            st.write(f"**Dataset Rows Loaded:** {len(dataset)}")
+            lat=latitude
+            longi=longitude
+    else:
+        if not text1.strip() or not text2.strip():
+            st.warning("Please enter both Latitude and Longitude values.")
+        else:
+            lat=text1
+            longi=text2
+            st.success(f"**Mode:** Manual Coordinates")
+            st.write(f"**Latitude:** {text1}")
+            st.write(f"**Longitude:** {text2}")
+            st.write(f"**Dataset Rows Loaded:** {len(dataset)}")
+    
+    dets=formatOutput(lat,longi,det)
+    st.write(f"**Full Preditction:** {str(dets)}")
+
