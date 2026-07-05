@@ -33,11 +33,24 @@ longitude=0.0
 import gradio as gr
 from geopy.geocoders import Nominatim
 
+import os
+# Load exactly 1000 lines safely
+def load_earthquake_data():
+    csv_filename = "earthquake_data.csv"
+    if not os.path.exists(csv_filename):
+        return pd.DataFrame(columns=["Latitude", "Longitude", "Date"])
+    try:
+        return pd.read_csv(csv_filename, nrows=1000)
+    except Exception as e:
+        print(f"CSV Load Error: {e}")
+        return pd.DataFrame()
+
+# Global dataset loading step
+dataset = load_earthquake_data()
+
 def convertToLatLon(address_str):
-    # Fallback for empty strings
-    if not address_str.strip():
+    if not address_str or not address_str.strip():
         return "0.0", "0.0"
-        
     geolocator = Nominatim(user_agent="my_ml_pipeline_app_2026")
     try:
         location = geolocator.geocode(address_str)
@@ -47,28 +60,28 @@ def convertToLatLon(address_str):
         print(f"Geocoding error: {e}")
     return "0.0", "0.0"
 
-# MERGED: Update visibility and labels simultaneously in ONE function
 def handle_radio_change(choice):
     if choice == "address":
         return (
-            gr.update(visible=True, value="", label="Enter Address"), 
-            gr.update(visible=False, value="", label="Enter Longitude")
+            gr.Textbox(visible=True, value="", label="Enter Address"), 
+            gr.Textbox(visible=False, value="", label="Enter Longitude")
         )
     else:
         return (
-            gr.update(visible=True, value="", label="Enter Latitude"), 
-            gr.update(visible=True, value="", label="Enter Longitude")
+            gr.Textbox(visible=True, value="", label="Enter Latitude"), 
+            gr.Textbox(visible=True, value="", label="Enter Longitude")
         )
 
 def run_api(choice, text1, text2):
     if choice == "address":
         latitude, longitude = convertToLatLon(text1)
-        return f"Mode: Address Lookup\nAddress: {text1}\nResult Lat/Lon: {latitude}, {longitude}"
+        return f"Mode: Address Lookup\nAddress: {text1}\nResult Lat/Lon: {latitude}, {longitude}\nDataset Rows Loaded: {len(dataset)}"
     else:
-        return f"Mode: Manual Coordinates\nLatitude: {text1}\nLongitude: {text2}"
+        return f"Mode: Manual Coordinates\nLatitude: {text1}\nLongitude: {text2}\nDataset Rows Loaded: {len(dataset)}"
 
 with gr.Blocks() as demo:
-    gr.Markdown("### Dynamic Hugging Face API Inputs")
+    gr.Markdown("### earthquake_predictNextDate App [beta version]")
+    gr.Markdown("This application predicts the earthquake. Please enter the data below to get a prediction.")
     
     radio = gr.Radio(
         choices=["address", "latitude/longitude"], 
@@ -76,14 +89,12 @@ with gr.Blocks() as demo:
         label="Select Input Method"
     )
     
-    # Starting configuration: 'address' mode defaults
     input_field_1 = gr.Textbox(label="Enter Address", visible=True)
     input_field_2 = gr.Textbox(label="Enter Longitude", visible=False)
     
     submit_btn = gr.Button("Submit to API")
     output = gr.Textbox(label="API Response", lines=4)
     
-    # FIXED: Single event listener to modify visibility and labels together
     radio.change(
         fn=handle_radio_change, 
         inputs=radio, 
@@ -96,9 +107,8 @@ with gr.Blocks() as demo:
         outputs=output
     )
 
-# MANDATORY FOR HF SPACES: Forces backend to listen properly to proxy requests
+# FIXED PORT LOOKUP LINE BELOW
 demo.launch(server_name="0.0.0.0", server_port=None)
-
 #latitude = st.number_input("latitude", min_value=-90.0, max_value=+90.0, value=34.05)
 #longitude = st.number_input("longitude", min_value=-180.0, max_value=+180.0, value=-118.24)
 
