@@ -5,7 +5,6 @@ import joblib
 from sklearn.cluster import KMeans
 from xgboost import XGBRegressor
 import numpy as np
-import gradio as gr
 
 # Now you can safely import your function
 Folder_name="Fearthquake_predictNextDate"
@@ -31,83 +30,80 @@ Please enter the data below to get a prediction.
 latitude=0.0
 longitude=0.0
 
-def convertToLatLon(address):
-    from geopy.geocoders import Nominatim
+import gradio as gr
+from geopy.geocoders import Nominatim
 
-# Initialize the geocoder with a unique user agent name
-    geolocator = Nominatim(user_agent="my_ml_pipeline_app")
-
-# Provide the physical address string
-    #address = "1600 Amphitheatre Pkwy, Mountain View, CA"
-    location = geolocator.geocode(address)
-    lat="0.0"
-    lon="0.0"
-    if location:
-        print(f"Address: {location.address}")
-        lat=location.latitude
-        print(f"Latitude: {location.latitude}")
-        lon=location.longitude
-        print(f"Longitude: {location.longitude}")
-    else:
-        print("Address not found.")
-
-    return lat,lon
+def convertToLatLon(address_str):
+    # Initialize the geocoder with a unique user agent name
+    geolocator = Nominatim(user_agent="my_ml_pipeline_app_2026")
+    try:
+        location = geolocator.geocode(address_str)
+        if location:
+            return location.latitude, location.longitude
+    except Exception as e:
+        print(f"Geocoding error: {e}")
+    return "0.0", "0.0"
 
 def handle_radio_change(choice):
-    # If Option 1 is selected, make both inputs visible
+    # If address is chosen, show input 1, hide input 2
     if choice == "address":
-        return gr.update(visible=True), gr.update(visible=True)
-    # If Option 2 is selected, hide the second input
+        return gr.update(visible=True, value=""), gr.update(visible=False, value="")
+    # If lat/lon is chosen, show both inputs
     else:
-        return gr.update(visible=True), gr.update(visible=False)
+        return gr.update(visible=True, value=""), gr.update(visible=True, value="")
 
 def run_api(choice, text1, text2):
     if choice == "address":
-        address = st.number_input("address", min_value=-90.0, max_value=+90.0, value=34.05)
-        latitude,longitude=convertToLatLon(address)
-        
-        return f"API called with Option 1. Text 1: '{text1}', Text 2: '{text2}'"
+        # text1 holds the address string
+        latitude, longitude = convertToLatLon(text1)
+        return f"Mode: Address Lookup\nAddress: {text1}\nResult Lat/Lon: {latitude}, {longitude}"
     else:
-        latitude = st.number_input("address", min_value=-90.0, max_value=+90.0, value=34.05)
-        longitude = st.number_input("address", min_value=-90.0, max_value=+90.0, value=34.05)
-
-        return f"API called with Option 2. Text 1: '{text1}'"
+        # text1 holds latitude, text2 holds longitude
+        return f"Mode: Manual Coordinates\nLatitude: {text1}\nLongitude: {text2}"
 
 with gr.Blocks() as demo:
     gr.Markdown("### Dynamic Hugging Face API Inputs")
     
-    # 1. Radio Button Selector
+    # 1. Fixed: 'value' must perfectly match one of your choices
     radio = gr.Radio(
         choices=["address", "latitude/longitude"], 
-        value="usa", 
-        label="Select options"
+        value="address", 
+        label="Select Input Method"
     )
     
-    # 2. Text Inputs (Both visible by default because 'Option 1' is default)
-    address = gr.Textbox(label="address", visible=True)
-    lat_long = gr.Textbox(label="lat/longi", visible=True)
+    # 2. Text Inputs (Default setup: address is visible, lat_long is hidden)
+    input_field_1 = gr.Textbox(label="Enter Address", visible=True)
+    input_field_2 = gr.Textbox(label="Enter Longitude", visible=False)
     
     # 3. Submit and Output
     submit_btn = gr.Button("Submit to API")
-    output = gr.Textbox(label="API Response")
+    output = gr.Textbox(label="API Response", lines=4)
     
-    # 4. Trigger layout update when radio selection changes
-    # The output list must match the returned gr.update() values in order
+    # 4. Handle visibility changes when the radio changes
     radio.change(
         fn=handle_radio_change, 
         inputs=radio, 
-        outputs=[address, lat_long]
+        outputs=[input_field_1, input_field_2]
     )
+    
+    # Dynamic labels to keep the UI clean
+    def update_labels(choice):
+        if choice == "address":
+            return gr.update(label="Enter Address"), gr.update()
+        else:
+            return gr.update(label="Enter Latitude"), gr.update(label="Enter Longitude")
+            
+    radio.change(fn=update_labels, inputs=radio, outputs=[input_field_1, input_field_2])
     
     # 5. Trigger API function on button click
     submit_btn.click(
         fn=run_api, 
-        inputs=[radio, address, lat_long], 
+        inputs=[radio, input_field_1, input_field_2], 
         outputs=output
     )
 
 demo.launch()
- 
+
 #latitude = st.number_input("latitude", min_value=-90.0, max_value=+90.0, value=34.05)
 #longitude = st.number_input("longitude", min_value=-180.0, max_value=+180.0, value=-118.24)
 
