@@ -94,14 +94,22 @@ def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kme
 
     #current_date_ts=current_date_ts.strftime('%Y-%m-%d')
     #print("date1:",current_date_ts)
+    current_today_ts=""
 
     from datetime import date
     try:
         current_date_ts = pd.to_datetime(current_state['time']).tz_localize(None) if pd.to_datetime(current_state['time']).tz is not None else pd.Timestamp(current_state['time'])
-        current_date_ts = pd.Timestamp(date.today())
+        #current_date_ts = pd.Timestamp(date.today())
     except Exception as m:
+        print(f"Error parsing date: {m}")
+        current_today_ts = pd.Timestamp(date.today())
 
-        current_date_ts = pd.Timestamp(date.today())
+    # Convert inputs to clean, timezone-naive Pandas Timestamps
+    date_a = pd.to_datetime(current_today_ts).tz_localize(None)
+    date_b = pd.to_datetime(current_date_ts).tz_localize(None)
+
+    days_since_date_a = (date_a - date_b).days
+
 
     # Extract baseline time sequences
     last_gap = float(current_state.get('days_since_last_local', 1))
@@ -113,10 +121,13 @@ def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kme
     print(f"Distance to Cluster Core Centroid: {dist_to_center:.4f} degrees")
     print(f"Baseline Event Reference Date:   {current_date_ts}\n")
 
-    det=""
+    future_date=""
+    ret="2"
+    ret_desc=""
     # 3. Pure Spatial Recursive Simulation Loop
     for i in range(1, steps + 1):
-        input_features = pd.DataFrame([{
+        input_features = pd.DataFrame([
+            {
             'latitude': float(input_lat),
             'longitude': float(input_lon),
             'spatial_cluster_id': pred_cluster,
@@ -151,18 +162,18 @@ def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kme
         # Datetime protection limits
         #days_rem = int((pd.Timestamp.max.tz_localize(None) - pd.Timedelta(days=1) - current_date_ts).days)
         #safe_days = min(pred_days, days_rem)
+        add_days=0
+        safe_days1=safe_days+int(add_days)
+        future_date1 = current_date_ts + pd.Timedelta(days=safe_days1)
         future_date = current_date_ts + pd.Timedelta(days=safe_days)
 
         # Predict Magnitude strictly using the spatial pattern identity
         pred_mag = float(model_intensity.predict(input_features).item())
 
-        det+="\n\n Forecasted Event :"+str(i)
-        print(f"Forecasted Event #{i}:")
-        det+="\n Date:"+str(future_date.strftime('%Y-%m-%d'))+" "+str(safe_days)+" days "
-        print(f"  -> Date: {future_date.strftime('%Y-%m-%d')} (Interval: {safe_days} days)")
-        det+="\n Predicted Intensity: "+str(pred_mag)
-        print(f"  -> Predicted Intensity: {pred_mag:.2f}")
-        print()
+        add_mag="0.0"
+        pred_mag+=float(add_mag)
+
+        days_between = days_since_date_a
 
         # 4. Update Time Sequences for Next Iteration Step
         current_date_ts = future_date
@@ -170,8 +181,73 @@ def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kme
         last_gap = float(safe_days)
         avg_local_gap = (avg_local_gap * 2 + safe_days) / 3
 
-    return det
-    
+        date_a = pd.Timestamp(date.today())
+        df['future_date']=future_date
+        df['future_date'] = pd.to_datetime(df['future_date']).dt.tz_localize(None)
+        df['days_since_date_a'] = (df['future_date'] - date_a).dt.days
+        days_since_date_a = df['days_since_date_a'].iloc[0]
+
+        print(f"===Forecasted Event #{i}:"+str(steps)+"===")
+        print(f"location:", ({input_lat}, {input_lon}) )
+        print(f"  -> days away from today : "+str(days_since_date_a))
+        print(f"  -> Date: {future_date.strftime('%Y-%m-%d')} (Interval: {safe_days} days)")
+        print(f"  -> Predicted Intensity: {pred_mag:.2f}")
+        print()
+
+        ret_desc+=str(future_date)+","+str(pred_mag)+"#"
+
+    date_a = pd.Timestamp(date.today())
+    df['future_date']=future_date
+    df['future_date'] = pd.to_datetime(df['future_date']).dt.tz_localize(None)
+    df['days_since_date_a'] = (df['future_date'] - date_a).dt.days
+    days_since_date_a = df['days_since_date_a'].iloc[0]
+
+    if days_since_date_a > 400:
+        print(" is greater than "+str(days_since_date_a))
+        ret="0"
+
+    elif days_since_date_a < -5 :
+        print(" is less than "+str(days_since_date_a))
+        ret="1"
+
+    else:
+        ret="2"
+
+    return ret,ret_desc
+
+# Execute pure spatial forecast
+#print(predict_next_quake_date(34.05, -118.24, "2026-06-18"))
+#34.239°N 25.124°E
+#40.911°N 47.761°E
+#42.360°N 126.573°W
+#34.291°N 25.107°E, greece
+#6.210°S 104.608°E, lampung indonesia.6.27.2016
+#1.00,121.0 ,Central Sulawesi,6/16/2026
+spatial_kmeans = KMeans(n_clusters=25, random_state=42, n_init='auto')
+spatial_kmeans.fit(X_spatial[['latitude', 'longitude']]) # Fit KMeans here
+
+def convertToLatLon(address):
+    from geopy.geocoders import Nominatim
+
+# Initialize the geocoder with a unique user agent name
+    geolocator = Nominatim(user_agent="my_ml_pipeline_app")
+
+# Provide the physical address string
+    #address = "1600 Amphitheatre Pkwy, Mountain View, CA"
+    location = geolocator.geocode(address)
+    lat="0.0"
+    lon="0.0"
+    if location:
+        print(f"Address: {location.address}")
+        lat=location.latitude
+        print(f"Latitude: {location.latitude}")
+        lon=location.longitude
+        print(f"Longitude: {location.longitude}")
+    else:
+        print("Address not found.")
+
+    return lat,lon
+
 # Execute pure spatial forecast
 #print(predict_next_quake_date(34.05, -118.24, "2026-06-18"))
 #34.239°N 25.124°E
@@ -185,15 +261,310 @@ def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kme
 #42.360°N 126.573°W
 #spatial_kmeans = KMeans(n_clusters=25, random_state=42, n_init='auto')
 
-predict_pure_spatial_timeline(
-    input_lat=latitude,
-    input_lon=longitude,
-    historical_grid_map=grid_map_spatial,
-    kmeans_obj=spatial_kmeans,
-    model_time=model_days,
-    model_intensity=model_mag,
-    steps=3
-)
+
+def convertToLatLon(address):
+    from geopy.geocoders import Nominatim
+
+# Initialize the geocoder with a unique user agent name
+    geolocator = Nominatim(user_agent="my_ml_pipeline_app")
+
+# Provide the physical address string
+    #address = "1600 Amphitheatre Pkwy, Mountain View, CA"
+    location = geolocator.geocode(address)
+    lat="0.0"
+    lon="0.0"
+    if location:
+        print(f"Address: {location.address}")
+        lat=location.latitude
+        print(f"Latitude: {location.latitude}")
+        lon=location.longitude
+        print(f"Longitude: {location.longitude}")
+    else:
+        print("Address not found.")
+
+    return lat,lon
+
+lat,lon=convertToLatLon(address)
+
+cnt=0
+stps=5
+det=""
+
+while cnt < 14:
+    print("stps:",stps)
+
+    rr,dt=predict_pure_spatial_timeline(
+        input_lat=lat,
+        input_lon=lon,
+        historical_grid_map=grid_map_spatial,
+        kmeans_obj=spatial_kmeans,
+        model_time=model_days_spatial,
+        model_intensity=model_mag_spatial,
+        steps=stps
+    )
+    det+=dt
+
+    cnt+=1
+    if rr=="2":
+        break
+    elif rr == "0":
+        stps-=5
+    elif rr == "1":
+        stps+=5
+
+import datetime
+import requests
+
+def get_earthquake_date(lat, lon, radius_km=50):
+
+    radius_coverage_km=10
+
+    # 1. Construct the USGS API endpoint URL
+    url = "https://earthquake.usgs.gov/fdsnws/event/1/query"
+
+    # 2. Define the geographic search parameters
+
+
+    cnt=0
+    while cnt < radius_coverage_km:
+        params = {
+        "format": "geojson",
+        "latitude": lat,
+        "longitude": lon,
+        "maxradiuskm": radius_km,
+        "orderby": "time"  # Puts the newest earthquake first
+    }
+    # 3. Request data from the API
+        response = requests.get(url, params=params)
+        print(response)
+        if response.status_code != 200:
+            return f"Error: API returned status code {response.status_code}"
+
+        data = response.json()
+        features = data.get("features", [])
+
+        if not features:
+            print ("No earthquakes found within this radius:"+str(radius_km))
+            radius_km+=50
+        else:
+          break
+
+        cnt+=1
+
+    # 4. Extract the most recent earthquake event properties
+    latest_quake = features[0]["properties"]
+    place = latest_quake["place"]
+    magnitude = latest_quake["mag"]
+
+    # USGS returns time in milliseconds since Unix epoch; convert to seconds
+    epoch_time_ms = latest_quake["time"]
+    readable_date = datetime.datetime.fromtimestamp(epoch_time_ms / 1000).strftime('%Y-%m-%d %H:%M:%S')
+
+    return {
+        "date_time": readable_date,
+        "location_description": place,
+        "magnitude": magnitude
+    }
+
+def getDateCloseToOriginal(o_date,p_date):
+
+  from datetime import datetime
+
+  t_diff=0
+  close_date=""
+  close_mag=""
+  d_since=0
+  t_diff1=0
+  close_date1=""
+  close_mag1=""
+  d_since1=0
+  t_diff2=0
+  close_date2=""
+  close_mag2=""
+  d_since2=0
+
+  first_time=True
+  highest_date=pd.to_datetime(o_date).date()
+  future_dates_cnt=0
+
+  for inn in p_date.split("#"):
+    if inn == "":
+      continue
+
+    t_date=inn.split(",")[0]
+    mag=inn.split(",")[1]
+
+    clean_date = pd.to_datetime(t_date).date()
+    o_date = pd.to_datetime(o_date).date()
+    days_since = (clean_date - o_date).days
+    
+    #print(o_date,days_since,clean_date,t_diff,t_diff1,t_diff2)
+    if int(abs(t_diff)) > int(abs(days_since)) or first_time :
+
+        t_diff2=abs(t_diff1)
+        close_date2=close_date1
+        close_mag2=close_mag1
+        d_since2=d_since1
+
+        t_diff1=abs(t_diff)
+        close_date1=close_date
+        close_mag1=close_mag
+        d_since1=d_since
+
+        t_diff=abs(days_since)
+        close_date=t_date
+        close_mag=mag
+        d_since=days_since
+
+        
+        a = datetime.strptime(str(highest_date), "%Y-%m-%d")
+        b = datetime.strptime(str(clean_date), "%Y-%m-%d")
+        if b > a:
+            highest_date=clean_date
+
+    elif  int(abs(t_diff1)) > int(abs(days_since)) or first_time :
+        t_diff2=abs(t_diff1)
+        close_date2=close_date1
+        close_mag2=close_mag1
+        d_since2=d_since1
+
+        t_diff1=abs(days_since)
+        close_date1=t_date
+        close_mag1=mag
+        d_since1=days_since
+        
+        a = datetime.strptime(str(highest_date), "%Y-%m-%d")
+        b = datetime.strptime(str(clean_date), "%Y-%m-%d")
+        if b > a:
+            highest_date=clean_date
+            
+    elif  int(abs(t_diff2)) > int(abs(days_since)) or first_time :
+        t_diff2=abs(days_since)
+        close_date2=t_date
+        close_mag2=mag
+        d_since2=days_since
+        
+        a = datetime.strptime(str(highest_date), "%Y-%m-%d")
+        b = datetime.strptime(str(clean_date), "%Y-%m-%d")
+        if b > a:
+            highest_date=clean_date
+
+    first_time=False
+
+  #print("HD:",highest_date)
+   
+  future_dates=""
+  future_dates_cnt=0
+  for inn in p_date.split("#"):
+    if inn == "":
+      continue
+
+    t_date=inn.split(",")[0]
+    mag=inn.split(",")[1]
+
+    clean_date = pd.to_datetime(t_date).date()
+  
+    #print("compare:",highest_date,clean_date)
+  
+    a = datetime.strptime(str(highest_date), "%Y-%m-%d")
+    b = datetime.strptime(str(clean_date), "%Y-%m-%d")
+    if a < b:
+ 
+        if int(future_dates_cnt) >= 1:
+            break
+        future_dates+=str(clean_date)+","+str(mag)+","
+
+        future_dates_cnt+=1
+   
+  f_date = pd.Timestamp(datetime.today())
+  f_date = f_date.date()
+  #print("f_HD:",f_date) 
+  f_dates=""
+  future_dates_cnt=0
+  for inn in p_date.split("#"):
+    if inn == "":
+      continue
+
+    t_date=inn.split(",")[0]
+    mag=inn.split(",")[1]
+
+    clean_date = pd.to_datetime(t_date).date()
+  
+    #print("compare:",f_date,clean_date)
+  
+    a = datetime.strptime(str(f_date), "%Y-%m-%d")
+    b = datetime.strptime(str(clean_date), "%Y-%m-%d")
+    if a < b:
+
+        if int(future_dates_cnt) >= 1:
+            break
+        f_dates+=str(clean_date)+","+str(mag)+","
+
+        future_dates_cnt+=1
+
+
+  pre_dates=str(close_date)+","+str(close_mag)+","+str(d_since)+","+str(close_date1)+","+str(close_mag1)+","+str(d_since1)+","+str(close_date2)+","+str(close_mag2)+","+str(d_since2)
+  pre_dates+=","+str(future_dates)
+  
+  return pre_dates,f_dates
+    
+def formatOutput():
+    quake_info = get_earthquake_date(lat, lon)
+    print(quake_info)
+
+    dt=quake_info['date_time']
+    mag=quake_info['magnitude']
+    add=quake_info['location_description']
+
+    original_date = pd.to_datetime(dt).date()
+
+    print()
+    print("##########################################")
+    print("RECENT EARTHQUAKE:")
+    print()
+    print("Address   : ",add)
+    print("Date      :", original_date)
+    print("Magnitude :",mag)
+
+    print("------------------------------------------")
+    print("AI PREDICTION:")
+    print()
+    dd,fd=getDateCloseToOriginal(original_date,det)
+    print("    AI prediction close to above earthquake:")
+
+    i=1
+for rr in dd.split(","):
+    if i == 1:
+        print("Date:",rr)
+    elif i == 2:
+        print("Magnitude:",rr)
+    elif i == 3:
+        print("Days away from predicted:",rr)
+        i=0
+    i+=1
+
+    print("    Future earthquakes prediction:")
+    for rr in fd.split(","):
+        print(rr)
+        print("------------------------------------------")
+    print("##########################################")
+
+     
+
+    AI prediction close to above earthquake:
+Date: 2026-07-05 10:12:04.411000
+Magnitude: 4.476568222045898
+Days away from predicted: 30
+Date: 2026-03-23 10:12:04.411000
+Magnitude: 4.476568222045898
+Days away from predicted: -74
+Date: 2026-10-02 10:12:04.411000
+Magnitude: 4.476568222045898
+Days away from predicted: 119
+Date: 2027-01-09
+Magnitude: 4.477953910827637
+Days away from predicted: 
+    Future earthquakes prediction:
 
 # Prediction button
 if st.button("Predict "):
