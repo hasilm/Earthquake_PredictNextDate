@@ -532,9 +532,6 @@ def formatOutput(lat,lon,det):
 #address="North Sulawesi"
 #address="Changning, China"
 #address="Catuday, Philippines"
-
-    
-
     quake_info = get_earthquake_date(lat, lon)
     print(quake_info)
 
@@ -570,10 +567,12 @@ def formatOutput(lat,lon,det):
 
     ret+="    Future earthquakes prediction:"
     for rr in fd.split(","):
-        ret+=rr+"\n"
+        ret+=str(rr)+"\n"
         ret+="------------------------------------------"
     
     ret+="##########################################"
+
+    return ret
 
 # Prediction button
 #if st.button("Predict "):
@@ -604,9 +603,9 @@ if st.button("click to predict"):
         else:
             with st.spinner("Geocoding address..."):
                 latitude, longitude = convertToLatLon(text1)
-            st.success(f"**Mode:** Address Lookup")
-            st.write(f"**Address Entered:** {text1}")
-            st.write(f"**Result Lat/Lon:** {latitude}, {longitude}")
+            st.success(f" Mode:** Address Lookup")
+            st.write(f" Address Entered:** {text1}")
+            st.write(f" Lat/Lon:** {latitude}, {longitude}")
             st.write(f"**Dataset Rows Loaded:** {len(dataset)}")
             lat=latitude
             longi=longitude
