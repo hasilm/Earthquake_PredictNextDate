@@ -28,9 +28,6 @@ This application predicts the earthquake.
 Please enter the data below to get a prediction.
 """)
 
-# User inputs
-import gradio as gr
-
 latitude=0.0
 longitude=0.0
 
@@ -55,8 +52,6 @@ def convertToLatLon(address):
         print("Address not found.")
 
     return lat,lon
-
-import gradio as gr
 
 def handle_radio_change(choice):
     # If Option 1 is selected, make both inputs visible
