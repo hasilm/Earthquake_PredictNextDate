@@ -87,8 +87,8 @@ else:
 df_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/df.csv"                      # enter the Hugging Face username here
 df = pd.read_csv(df_path)
 
-df_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/df.csv"                      # enter the Hugging Face username here
-df = pd.read_csv(df_path)
+X_spatial_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/X_spatial.csv"                      # enter the Hugging Face username here
+X_spatial = pd.read_csv(X_spatial_path)
 
 spatial_kmeans = KMeans(n_clusters=25, random_state=42, n_init='auto')
 df['spatial_cluster_id'] = spatial_kmeans.fit_predict(df[['latitude', 'longitude']])
