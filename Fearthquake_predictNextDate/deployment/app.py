@@ -5,6 +5,7 @@ import joblib
 from sklearn.cluster import KMeans
 from xgboost import XGBRegressor
 import numpy as np
+import gradio as gr
 
 # Now you can safely import your function
 Folder_name="Fearthquake_predictNextDate"
