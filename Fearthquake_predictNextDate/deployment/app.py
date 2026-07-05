@@ -34,75 +34,70 @@ import gradio as gr
 from geopy.geocoders import Nominatim
 
 def convertToLatLon(address_str):
-    # Initialize the geocoder with a unique user agent name
+    # Fallback for empty strings
+    if not address_str.strip():
+        return "0.0", "0.0"
+        
     geolocator = Nominatim(user_agent="my_ml_pipeline_app_2026")
     try:
         location = geolocator.geocode(address_str)
         if location:
-            return location.latitude, location.longitude
+            return str(location.latitude), str(location.longitude)
     except Exception as e:
         print(f"Geocoding error: {e}")
     return "0.0", "0.0"
 
+# MERGED: Update visibility and labels simultaneously in ONE function
 def handle_radio_change(choice):
-    # If address is chosen, show input 1, hide input 2
     if choice == "address":
-        return gr.update(visible=True, value=""), gr.update(visible=False, value="")
-    # If lat/lon is chosen, show both inputs
+        return (
+            gr.update(visible=True, value="", label="Enter Address"), 
+            gr.update(visible=False, value="", label="Enter Longitude")
+        )
     else:
-        return gr.update(visible=True, value=""), gr.update(visible=True, value="")
+        return (
+            gr.update(visible=True, value="", label="Enter Latitude"), 
+            gr.update(visible=True, value="", label="Enter Longitude")
+        )
 
 def run_api(choice, text1, text2):
     if choice == "address":
-        # text1 holds the address string
         latitude, longitude = convertToLatLon(text1)
         return f"Mode: Address Lookup\nAddress: {text1}\nResult Lat/Lon: {latitude}, {longitude}"
     else:
-        # text1 holds latitude, text2 holds longitude
         return f"Mode: Manual Coordinates\nLatitude: {text1}\nLongitude: {text2}"
 
 with gr.Blocks() as demo:
     gr.Markdown("### Dynamic Hugging Face API Inputs")
     
-    # 1. Fixed: 'value' must perfectly match one of your choices
     radio = gr.Radio(
         choices=["address", "latitude/longitude"], 
         value="address", 
         label="Select Input Method"
     )
     
-    # 2. Text Inputs (Default setup: address is visible, lat_long is hidden)
+    # Starting configuration: 'address' mode defaults
     input_field_1 = gr.Textbox(label="Enter Address", visible=True)
     input_field_2 = gr.Textbox(label="Enter Longitude", visible=False)
     
-    # 3. Submit and Output
     submit_btn = gr.Button("Submit to API")
     output = gr.Textbox(label="API Response", lines=4)
     
-    # 4. Handle visibility changes when the radio changes
+    # FIXED: Single event listener to modify visibility and labels together
     radio.change(
         fn=handle_radio_change, 
         inputs=radio, 
         outputs=[input_field_1, input_field_2]
     )
     
-    # Dynamic labels to keep the UI clean
-    def update_labels(choice):
-        if choice == "address":
-            return gr.update(label="Enter Address"), gr.update()
-        else:
-            return gr.update(label="Enter Latitude"), gr.update(label="Enter Longitude")
-            
-    radio.change(fn=update_labels, inputs=radio, outputs=[input_field_1, input_field_2])
-    
-    # 5. Trigger API function on button click
     submit_btn.click(
         fn=run_api, 
         inputs=[radio, input_field_1, input_field_2], 
         outputs=output
     )
 
-demo.launch()
+# MANDATORY FOR HF SPACES: Forces backend to listen properly to proxy requests
+demo.launch(server_name="0.0.0.0", server_port=7860)
 
 #latitude = st.number_input("latitude", min_value=-90.0, max_value=+90.0, value=34.05)
 #longitude = st.number_input("longitude", min_value=-180.0, max_value=+180.0, value=-118.24)
