@@ -307,8 +307,8 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days
         print("stps:",stps)
 
         rr,dt=predict_pure_spatial_timeline(
-            input_lat=lat,
-            input_lon=lon,
+            input_lat=latitude,
+            input_lon=longitude,
             historical_grid_map=grid_map_spatial,
             kmeans_obj=spatial_kmeans,
             model_time=model_days_spatial,
