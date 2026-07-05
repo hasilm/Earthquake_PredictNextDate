@@ -27,7 +27,14 @@ import os
 from geopy.geocoders import Nominatim
 
 # 1. App Titles and Description
-st.title("earthquake_predictNextDate App [beta version]")
+#st.title("earthquake_predictNextDate App [beta version]")
+
+# Main Title with an Emoji Anchor
+st.title("🌍 Earthquake Prediction App")
+
+# Add a formatted sub-header for the version info
+st.markdown("### :orange[[Beta Version 2.0]]")
+st.divider() # Adds a clean horizontal line under the title block
 st.write("This application predicts the earthquake. Please enter the data below to get a prediction.")
 
 # 2. Fast CSV Data Loader (1,000 rows max)
