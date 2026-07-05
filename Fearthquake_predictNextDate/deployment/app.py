@@ -97,13 +97,13 @@ with gr.Blocks() as demo:
     )
 
 # MANDATORY FOR HF SPACES: Forces backend to listen properly to proxy requests
-demo.launch(server_name="0.0.0.0", server_port=7860)
+demo.launch(server_name="0.0.0.0", server_port=None)
 
 #latitude = st.number_input("latitude", min_value=-90.0, max_value=+90.0, value=34.05)
 #longitude = st.number_input("longitude", min_value=-180.0, max_value=+180.0, value=-118.24)
 
 df_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/df.csv"                      # enter the Hugging Face username here
-df = pd.read_csv(df_path,nrows=3000)
+df = pd.read_csv(df_path)
 
 spatial_kmeans = KMeans(n_clusters=25, random_state=42, n_init='auto')
 df['spatial_cluster_id'] = spatial_kmeans.fit_predict(df[['latitude', 'longitude']])
