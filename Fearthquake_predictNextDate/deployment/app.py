@@ -33,7 +33,9 @@ from geopy.geocoders import Nominatim
 st.title("🌍 Earthquake Prediction App")
 
 # Add a formatted sub-header for the version info
-st.markdown("### :orange[[Beta Version 2.0]]")
+#st.markdown("### :orange[[Beta Version 2.0]]")
+st.markdown("<span style='font-size: 10px;'>[Beta Version 2.0]</span>", unsafe_allow_html=True)
+
 st.divider() # Adds a clean horizontal line under the title block
 st.write("This application predicts the earthquake. Please enter the data below to get a prediction.")
 
@@ -165,8 +167,7 @@ def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kme
     date_b = pd.to_datetime(current_date_ts).tz_localize(None)
 
     days_since_date_a = (date_a - date_b).days
-
-
+    
     # Extract baseline time sequences
     last_gap = float(current_state.get('days_since_last_local', 1))
     prev_gap = last_gap - float(current_state.get('gap_acceleration', 0))
@@ -542,37 +543,59 @@ def formatOutput(lat,lon,det):
     original_date = pd.to_datetime(dt).date()
 
     ret="##########################################"
-    ret+="RECENT EARTHQUAKE:"
+    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+    ret="RECENT EARTHQUAKE:"
+    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
     
-    ret+="Address   : "+str(add)+"\n"
-    ret+="Date     :"+str(original_date)+"\n"
-    ret+="Magnitude :"+str(mag)+"\n"
+    ret="Address   : "+str(add)+"\n"
+    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
-    ret+="------------------------------------------"
-    ret+="AI PREDICTION:"
-    
+    ret="Date     :"+str(original_date)+"\n"
+    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+    ret="Magnitude :"+str(mag)+"\n"
+    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+
+    ret="------------------------------------------"
+    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+
+    ret="AI PREDICTION:"
+    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+
     dd,fd=getDateCloseToOriginal(original_date,det)
-    ret+="    AI prediction close to above earthquake:"
+    ret="    AI prediction close to above earthquake:"
+    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
     i=1
     for rr in dd.split(","):
         if i == 1:
-            ret+="Date:"+str(rr)+"\n"
+            ret="Date:"+str(rr)
+            st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+
         elif i == 2:
-            ret+="Magnitude:"+str(rr)+"\n"
+            ret="Magnitude:"+str(rr)
+            st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+
         elif i == 3:
-            ret+="Days away from predicted:"+str(rr)+"\n"
+            ret="Days away from predicted:"+str(rr)
+            st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+
             i=0
         i+=1
 
-    ret+="    Future earthquakes prediction:"
-    for rr in fd.split(","):
-        ret+=str(rr)+"\n"
-        ret+="------------------------------------------"
-    
-    ret+="##########################################"
+    ret="    Future earthquakes prediction:"
+    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
-    return ret
+    for rr in fd.split(","):
+        ret=str(rr)
+        st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+
+        ret="------------------------------------------"
+        st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+
+    ret="##########################################"
+    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+
+    #return ret
 
 # Prediction button
 #if st.button("Predict "):
@@ -621,10 +644,6 @@ if st.button("click to predict"):
             st.write(f"**Dataset Rows Loaded:** {len(dataset)}")
 
     det=runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days,model_mag)
-    st.write(f"itction:** {str(lat)}")
-    st.write(f"itction:** {str(longi)}")
-    st.write(f"itction:** {str(det)}")
 
-    dets=formatOutput(lat,longi,det)
-    st.write(f"**Full Preditction:** {str(dets)}")
+    formatOutput(lat,longi,det)
 
