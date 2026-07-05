@@ -28,8 +28,92 @@ Please enter the data below to get a prediction.
 """)
 
 # User inputs
-latitude = st.number_input("latitude", min_value=-90.0, max_value=+90.0, value=34.05)
-longitude = st.number_input("longitude", min_value=-180.0, max_value=+180.0, value=-118.24)
+import gradio as gr
+
+latitude=0.0
+longitude=0.0
+
+def convertToLatLon(address):
+    from geopy.geocoders import Nominatim
+
+# Initialize the geocoder with a unique user agent name
+    geolocator = Nominatim(user_agent="my_ml_pipeline_app")
+
+# Provide the physical address string
+    #address = "1600 Amphitheatre Pkwy, Mountain View, CA"
+    location = geolocator.geocode(address)
+    lat="0.0"
+    lon="0.0"
+    if location:
+        print(f"Address: {location.address}")
+        lat=location.latitude
+        print(f"Latitude: {location.latitude}")
+        lon=location.longitude
+        print(f"Longitude: {location.longitude}")
+    else:
+        print("Address not found.")
+
+    return lat,lon
+
+import gradio as gr
+
+def handle_radio_change(choice):
+    # If Option 1 is selected, make both inputs visible
+    if choice == "address":
+        return gr.update(visible=True), gr.update(visible=True)
+    # If Option 2 is selected, hide the second input
+    else:
+        return gr.update(visible=True), gr.update(visible=False)
+
+def run_api(choice, text1, text2):
+    if choice == "address":
+        address = st.number_input("address", min_value=-90.0, max_value=+90.0, value=34.05)
+        latitude,longitude=convertToLatLon(address)
+        
+        return f"API called with Option 1. Text 1: '{text1}', Text 2: '{text2}'"
+    else:
+        latitude = st.number_input("address", min_value=-90.0, max_value=+90.0, value=34.05)
+        longitude = st.number_input("address", min_value=-90.0, max_value=+90.0, value=34.05)
+
+        return f"API called with Option 2. Text 1: '{text1}'"
+
+with gr.Blocks() as demo:
+    gr.Markdown("### Dynamic Hugging Face API Inputs")
+    
+    # 1. Radio Button Selector
+    radio = gr.Radio(
+        choices=["address", "latitude/longitude"], 
+        value="usa", 
+        label="Select options"
+    )
+    
+    # 2. Text Inputs (Both visible by default because 'Option 1' is default)
+    address = gr.Textbox(label="address", visible=True)
+    lat_long = gr.Textbox(label="lat/longi", visible=True)
+    
+    # 3. Submit and Output
+    submit_btn = gr.Button("Submit to API")
+    output = gr.Textbox(label="API Response")
+    
+    # 4. Trigger layout update when radio selection changes
+    # The output list must match the returned gr.update() values in order
+    radio.change(
+        fn=handle_radio_change, 
+        inputs=radio, 
+        outputs=[address, lat_long]
+    )
+    
+    # 5. Trigger API function on button click
+    submit_btn.click(
+        fn=run_api, 
+        inputs=[radio, address, lat_long], 
+        outputs=output
+    )
+
+demo.launch()
+ 
+#latitude = st.number_input("latitude", min_value=-90.0, max_value=+90.0, value=34.05)
+#longitude = st.number_input("longitude", min_value=-180.0, max_value=+180.0, value=-118.24)
 
 df_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/df.csv"                      # enter the Hugging Face username here
 df = pd.read_csv(df_path)
@@ -226,28 +310,6 @@ def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kme
 spatial_kmeans = KMeans(n_clusters=25, random_state=42, n_init='auto')
 spatial_kmeans.fit(X_spatial[['latitude', 'longitude']]) # Fit KMeans here
 
-def convertToLatLon(address):
-    from geopy.geocoders import Nominatim
-
-# Initialize the geocoder with a unique user agent name
-    geolocator = Nominatim(user_agent="my_ml_pipeline_app")
-
-# Provide the physical address string
-    #address = "1600 Amphitheatre Pkwy, Mountain View, CA"
-    location = geolocator.geocode(address)
-    lat="0.0"
-    lon="0.0"
-    if location:
-        print(f"Address: {location.address}")
-        lat=location.latitude
-        print(f"Latitude: {location.latitude}")
-        lon=location.longitude
-        print(f"Longitude: {location.longitude}")
-    else:
-        print("Address not found.")
-
-    return lat,lon
-
 # Execute pure spatial forecast
 #print(predict_next_quake_date(34.05, -118.24, "2026-06-18"))
 #34.239°N 25.124°E
@@ -262,56 +324,38 @@ def convertToLatLon(address):
 #spatial_kmeans = KMeans(n_clusters=25, random_state=42, n_init='auto')
 
 
-def convertToLatLon(address):
-    from geopy.geocoders import Nominatim
+#lat,lon=convertToLatLon(address)
 
-# Initialize the geocoder with a unique user agent name
-    geolocator = Nominatim(user_agent="my_ml_pipeline_app")
+def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days_spatial,model_mag_spatial):
+    cnt=0
+    stps=5
+    det=""
 
-# Provide the physical address string
-    #address = "1600 Amphitheatre Pkwy, Mountain View, CA"
-    location = geolocator.geocode(address)
-    lat="0.0"
-    lon="0.0"
-    if location:
-        print(f"Address: {location.address}")
-        lat=location.latitude
-        print(f"Latitude: {location.latitude}")
-        lon=location.longitude
-        print(f"Longitude: {location.longitude}")
-    else:
-        print("Address not found.")
+    while cnt < 14:
+        print("stps:",stps)
 
-    return lat,lon
+        rr,dt=predict_pure_spatial_timeline(
+            input_lat=lat,
+            input_lon=lon,
+            historical_grid_map=grid_map_spatial,
+            kmeans_obj=spatial_kmeans,
+            model_time=model_days_spatial,
+            model_intensity=model_mag_spatial,
+            steps=stps
+        )
+        det+=dt
 
-lat,lon=convertToLatLon(address)
-
-cnt=0
-stps=5
-det=""
-
-while cnt < 14:
-    print("stps:",stps)
-
-    rr,dt=predict_pure_spatial_timeline(
-        input_lat=lat,
-        input_lon=lon,
-        historical_grid_map=grid_map_spatial,
-        kmeans_obj=spatial_kmeans,
-        model_time=model_days_spatial,
-        model_intensity=model_mag_spatial,
-        steps=stps
-    )
-    det+=dt
-
-    cnt+=1
-    if rr=="2":
-        break
-    elif rr == "0":
-        stps-=5
-    elif rr == "1":
-        stps+=5
-
+        cnt+=1
+        if rr=="2":
+            break
+        elif rr == "0":
+            stps-=5
+        elif rr == "1":
+            stps+=5
+    
+    return det
+det=runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days_spatial,model_mag_spatial)
+    
 import datetime
 import requests
 
@@ -508,7 +552,18 @@ def getDateCloseToOriginal(o_date,p_date):
   
   return pre_dates,f_dates
     
-def formatOutput():
+def formatOutput(lat,lon,det):
+    ret=""
+    address="Bandar Lampung, Indonesia"
+#address = "1600 Amphitheatre Pkwy, Mountain View, CA"
+#address="Central Sulawesi"
+#address="12 stryker ct, bridgewater,nj,usa"
+#address="North Sulawesi"
+#address="Changning, China"
+#address="Catuday, Philippines"
+
+    
+
     quake_info = get_earthquake_date(lat, lon)
     print(quake_info)
 
@@ -518,53 +573,36 @@ def formatOutput():
 
     original_date = pd.to_datetime(dt).date()
 
-    print()
-    print("##########################################")
-    print("RECENT EARTHQUAKE:")
-    print()
-    print("Address   : ",add)
-    print("Date      :", original_date)
-    print("Magnitude :",mag)
+    ret="##########################################"
+    ret+="RECENT EARTHQUAKE:"
+    
+    ret+="Address   : "+str(add)+"\n"
+    ret+="Date     :"+str(original_date)+"\n"
+    ret+="Magnitude :"+str(mag)+"\n"
 
-    print("------------------------------------------")
-    print("AI PREDICTION:")
-    print()
+    ret+="------------------------------------------"
+    ret+="AI PREDICTION:"
+    
     dd,fd=getDateCloseToOriginal(original_date,det)
-    print("    AI prediction close to above earthquake:")
+    ret+="    AI prediction close to above earthquake:"
 
     i=1
-for rr in dd.split(","):
-    if i == 1:
-        print("Date:",rr)
-    elif i == 2:
-        print("Magnitude:",rr)
-    elif i == 3:
-        print("Days away from predicted:",rr)
-        i=0
-    i+=1
+    for rr in dd.split(","):
+        if i == 1:
+            ret+="Date:"+str(rr)+"\n"
+        elif i == 2:
+            ret+="Magnitude:"+str(rr)+"\n"
+        elif i == 3:
+            ret+="Days away from predicted:"+str(rr)+"\n"
+            i=0
+        i+=1
 
-    print("    Future earthquakes prediction:")
+    ret+="    Future earthquakes prediction:"
     for rr in fd.split(","):
-        print(rr)
-        print("------------------------------------------")
-    print("##########################################")
-
-     
-
-    AI prediction close to above earthquake:
-Date: 2026-07-05 10:12:04.411000
-Magnitude: 4.476568222045898
-Days away from predicted: 30
-Date: 2026-03-23 10:12:04.411000
-Magnitude: 4.476568222045898
-Days away from predicted: -74
-Date: 2026-10-02 10:12:04.411000
-Magnitude: 4.476568222045898
-Days away from predicted: 119
-Date: 2027-01-09
-Magnitude: 4.477953910827637
-Days away from predicted: 
-    Future earthquakes prediction:
+        ret+=rr+"\n"
+        ret+="------------------------------------------"
+    
+    ret+="##########################################"
 
 # Prediction button
 if st.button("Predict "):
@@ -577,5 +615,8 @@ if st.button("Predict "):
     model_intensity=model_mag,
     steps=3)
     
+    #lat,lon=convertToLatLon(address)
+    dets=formatOutput(lat,lon)
+    
     st.subheader("Prediction Result:")
-    st.success(f"The model predict: **{det}**")
+    st.success(f"The model predict: **{dets}**")
