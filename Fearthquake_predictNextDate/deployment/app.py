@@ -20,13 +20,6 @@ model_days = joblib.load(model_path)
 model_path = hf_hub_download(repo_id=str(HF_username)+"/"+str(App_name), filename=Model_name2) # enter the Hugging Face username here
 model_mag = joblib.load(model_path)
 
-# Streamlit UI for Machine Failure Prediction
-st.title(str(App_name)+" App [beta version]")
-st.write("""
-This application predicts the earthquake.
-Please enter the data below to get a prediction.
-""")
-
 latitude=0.0
 longitude=0.0
 
@@ -44,7 +37,7 @@ def load_earthquake_data():
     if not os.path.exists(csv_filename):
         return pd.DataFrame(columns=["Latitude", "Longitude", "Date"])
     try:
-        return pd.read_csv(csv_filename, nrows=1000)
+        return pd.read_csv(csv_filename)
     except Exception as e:
         st.error(f"CSV Load Error: {e}")
         return pd.DataFrame()
@@ -326,7 +319,7 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days
             stps+=5
     
     return det
-det=runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days_spatial,model_mag_spatial)
+det=runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days,model_mag)
     
 import datetime
 import requests
