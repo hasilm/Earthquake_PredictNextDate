@@ -30,11 +30,15 @@ Please enter the data below to get a prediction.
 latitude=0.0
 longitude=0.0
 
-import gradio as gr
+import os
 from geopy.geocoders import Nominatim
 
-import os
-# Load exactly 1000 lines safely
+# 1. App Titles and Description
+st.title("earthquake_predictNextDate App [beta version]")
+st.write("This application predicts the earthquake. Please enter the data below to get a prediction.")
+
+# 2. Fast CSV Data Loader (1,000 rows max)
+@st.cache_data # Caches data so it doesn't reload and slow down on every click
 def load_earthquake_data():
     csv_filename = "earthquake_data.csv"
     if not os.path.exists(csv_filename):
@@ -42,73 +46,63 @@ def load_earthquake_data():
     try:
         return pd.read_csv(csv_filename, nrows=1000)
     except Exception as e:
-        print(f"CSV Load Error: {e}")
+        st.error(f"CSV Load Error: {e}")
         return pd.DataFrame()
 
-# Global dataset loading step
 dataset = load_earthquake_data()
 
+# 3. Geocoding Function
 def convertToLatLon(address_str):
     if not address_str or not address_str.strip():
         return "0.0", "0.0"
-    geolocator = Nominatim(user_agent="my_ml_pipeline_app_2026")
+    geolocator = Nominatim(user_agent="my_earthquake_pipeline_app_2026")
     try:
         location = geolocator.geocode(address_str)
         if location:
             return str(location.latitude), str(location.longitude)
     except Exception as e:
-        print(f"Geocoding error: {e}")
+        st.sidebar.error(f"Geocoding error: {e}")
     return "0.0", "0.0"
 
-def handle_radio_change(choice):
+# 4. Streamlit Radio Button Component
+choice = st.radio(
+    "Select Input Method",
+    options=["address", "latitude/longitude"],
+    index=0 # Sets 'address' as the default choice
+)
+
+# 5. Dynamic Conditional Input Fields
+# Streamlit automatically handles layout visibility using simple if/else logic!
+if choice == "address":
+    text1 = st.text_input("Enter Address", value="")
+    text2 = "" # Dummy empty value to pass downstream
+else:
+    text1 = st.text_input("Enter Latitude", value="")
+    text2 = st.text_input("Enter Longitude", value="")
+
+# 6. Action Submission Button
+if st.button("Submit to API"):
+    st.markdown("### API Response")
+    
     if choice == "address":
-        return (
-            gr.Textbox(visible=True, value="", label="Enter Address"), 
-            gr.Textbox(visible=False, value="", label="Enter Longitude")
-        )
+        if not text1.strip():
+            st.warning("Please type a valid address before submitting.")
+        else:
+            with st.spinner("Geocoding address..."):
+                latitude, longitude = convertToLatLon(text1)
+            st.success(f"**Mode:** Address Lookup")
+            st.write(f"**Address Entered:** {text1}")
+            st.write(f"**Result Lat/Lon:** {latitude}, {longitude}")
+            st.write(f"**Dataset Rows Loaded:** {len(dataset)}")
     else:
-        return (
-            gr.Textbox(visible=True, value="", label="Enter Latitude"), 
-            gr.Textbox(visible=True, value="", label="Enter Longitude")
-        )
+        if not text1.strip() or not text2.strip():
+            st.warning("Please enter both Latitude and Longitude values.")
+        else:
+            st.success(f"**Mode:** Manual Coordinates")
+            st.write(f"**Latitude:** {text1}")
+            st.write(f"**Longitude:** {text2}")
+            st.write(f"**Dataset Rows Loaded:** {len(dataset)}")
 
-def run_api(choice, text1, text2):
-    if choice == "address":
-        latitude, longitude = convertToLatLon(text1)
-        return f"Mode: Address Lookup\nAddress: {text1}\nResult Lat/Lon: {latitude}, {longitude}\nDataset Rows Loaded: {len(dataset)}"
-    else:
-        return f"Mode: Manual Coordinates\nLatitude: {text1}\nLongitude: {text2}\nDataset Rows Loaded: {len(dataset)}"
-
-with gr.Blocks() as demo:
-    gr.Markdown("### earthquake_predictNextDate App [beta version]")
-    gr.Markdown("This application predicts the earthquake. Please enter the data below to get a prediction.")
-    
-    radio = gr.Radio(
-        choices=["address", "latitude/longitude"], 
-        value="address", 
-        label="Select Input Method"
-    )
-    
-    input_field_1 = gr.Textbox(label="Enter Address", visible=True)
-    input_field_2 = gr.Textbox(label="Enter Longitude", visible=False)
-    
-    submit_btn = gr.Button("Submit to API")
-    output = gr.Textbox(label="API Response", lines=4)
-    
-    radio.change(
-        fn=handle_radio_change, 
-        inputs=radio, 
-        outputs=[input_field_1, input_field_2]
-    )
-    
-    submit_btn.click(
-        fn=run_api, 
-        inputs=[radio, input_field_1, input_field_2], 
-        outputs=output
-    )
-
-# FIXED PORT LOOKUP LINE BELOW
-demo.launch(server_name="0.0.0.0", server_port=None)
 #latitude = st.number_input("latitude", min_value=-90.0, max_value=+90.0, value=34.05)
 #longitude = st.number_input("longitude", min_value=-180.0, max_value=+180.0, value=-118.24)
 
