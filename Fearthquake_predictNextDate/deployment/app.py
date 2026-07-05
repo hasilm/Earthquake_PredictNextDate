@@ -622,6 +622,9 @@ if st.button("click to predict"):
             st.write(f"**Dataset Rows Loaded:** {len(dataset)}")
 
     det=runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days,model_mag)
+    st.write(f"itction:** {str(lat)}")
+    st.write(f"itction:** {str(longi)}")
+    st.write(f"itction:** {str(det)}")
 
     dets=formatOutput(lat,longi,det)
     st.write(f"**Full Preditction:** {str(dets)}")
