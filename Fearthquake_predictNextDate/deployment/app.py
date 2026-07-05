@@ -103,7 +103,7 @@ demo.launch(server_name="0.0.0.0", server_port=7860)
 #longitude = st.number_input("longitude", min_value=-180.0, max_value=+180.0, value=-118.24)
 
 df_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/df.csv"                      # enter the Hugging Face username here
-df = pd.read_csv(df_path)
+df = pd.read_csv(df_path,nrows=3000)
 
 spatial_kmeans = KMeans(n_clusters=25, random_state=42, n_init='auto')
 df['spatial_cluster_id'] = spatial_kmeans.fit_predict(df[['latitude', 'longitude']])
