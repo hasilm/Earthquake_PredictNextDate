@@ -319,7 +319,6 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days
             stps+=5
     
     return det
-det=runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days,model_mag)
     
 import datetime
 import requests
@@ -614,7 +613,9 @@ if st.button("click to predict"):
             st.write(f"**Latitude:** {text1}")
             st.write(f"**Longitude:** {text2}")
             st.write(f"**Dataset Rows Loaded:** {len(dataset)}")
-    
+
+    det=runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days,model_mag)
+
     dets=formatOutput(lat,longi,det)
     st.write(f"**Full Preditction:** {str(dets)}")
 
