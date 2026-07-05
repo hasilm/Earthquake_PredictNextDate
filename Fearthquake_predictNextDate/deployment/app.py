@@ -24,7 +24,7 @@ model_mag = joblib.load(model_path)
 # Streamlit UI for Machine Failure Prediction
 st.title(str(App_name)+" App [beta version]")
 st.write("""
-This application predicts the data set provided.
+This application predicts the earthquake.
 Please enter the data below to get a prediction.
 """)
 
