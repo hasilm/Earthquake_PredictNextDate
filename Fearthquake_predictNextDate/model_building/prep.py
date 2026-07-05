@@ -34,7 +34,7 @@ data_filename="earthquakes.csv"
 #DATASET_PATH = "/data/"+str(data_filename)                  # enter the Hugging Face username here
 DATASET_PATH = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/"+str(data_filename)                  # enter the Hugging Face username here
 
-df = pd.read_csv(DATASET_PATH)
+df = pd.read_csv(DATASET_PATH,nrows=3000)
 print("Dataset loaded successfully.")
 #df = df.drop(columns=['id'])
 
