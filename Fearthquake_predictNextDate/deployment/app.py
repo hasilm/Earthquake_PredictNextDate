@@ -534,7 +534,7 @@ def formatOutput(lat,lon,det):
 #address="Changning, China"
 #address="Catuday, Philippines"
     quake_info = get_earthquake_date(lat, lon)
-    print(quake_info)
+    #print(quake_info)
 
     dt=quake_info['date_time']
     mag=quake_info['magnitude']
@@ -542,55 +542,55 @@ def formatOutput(lat,lon,det):
 
     original_date = pd.to_datetime(dt).date()
 
-    ret="##########################################"
+    ret="###################################################################################"
     st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
-    ret="RECENT EARTHQUAKE:"
+    ret="<b>RECENT EARTHQUAKE:</b>"
     st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
     
-    ret="Address   : "+str(add)+"\n"
+    ret="Address   : <b>"+str(add)+"</>"
     st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
-    ret="Date     :"+str(original_date)+"\n"
+    ret="Date     :<b>"+str(original_date)+"</b>"
     st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
-    ret="Magnitude :"+str(mag)+"\n"
-    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
-
-    ret="------------------------------------------"
+    ret="Magnitude :<b>"+str(mag)+"</b>"
     st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
-    ret="AI PREDICTION:"
+    ret="------------------------------------------------------------------------------------"
+    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+
+    ret="<b>AI PREDICTION:</b>"
     st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
     dd,fd=getDateCloseToOriginal(original_date,det)
-    ret="    AI prediction close to above earthquake:"
+    ret="        <i>AI prediction close to above earthquake:</i>"
     st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
     i=1
     for rr in dd.split(","):
         if i == 1:
-            ret="Date:"+str(rr)
+            ret="Date:<b>"+str(rr)+"</b>"
             st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
         elif i == 2:
-            ret="Magnitude:"+str(rr)
+            ret="Magnitude:<b>"+str(rr)+"</b>"
             st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
         elif i == 3:
-            ret="Days away from predicted:"+str(rr)
+            ret="Days away from predicted:<b>"+str(rr)+"/b"
             st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
             i=0
         i+=1
 
-    ret="    Future earthquakes prediction:"
+    ret="   <b><i> Future earthquakes prediction:</i></i>"
     st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
     for rr in fd.split(","):
         ret=str(rr)
-        st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+        st.markdown("<span style='font-size: 10px;'><b>"+str(ret)+"</b></span>", unsafe_allow_html=True)
 
-        ret="------------------------------------------"
-        st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+        #ret="------------------------------------------"
+        #st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
     ret="##########################################"
     st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
