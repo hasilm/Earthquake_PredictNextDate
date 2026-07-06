@@ -34,8 +34,8 @@ st.title("🌍 Earthquake Prediction App")
 
 # Add a formatted sub-header for the version info
 #st.markdown("### :orange[[Beta Version 2.0]]")
-st.markdown("<span style='font-size: 14px;'>[Beta Version 2.0]</span>", unsafe_allow_html=True)
-
+st.markdown("<p style='text-align: right; font-size: 14px;'>orange[[ Beta Version 2.0 ]]</p>", unsafe_allow_html=True)
+            
 st.divider() # Adds a clean horizontal line under the title block
 st.write("<i>This application predicts the earthquake. Please enter the data below to get a prediction.</i>")
 
@@ -296,16 +296,13 @@ spatial_kmeans.fit(X_spatial[['latitude', 'longitude']]) # Fit KMeans here
 #42.360°N 126.573°W
 #spatial_kmeans = KMeans(n_clusters=25, random_state=42, n_init='auto')
 
-
-#lat,lon=convertToLatLon(address)
-
 def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days_spatial,model_mag_spatial):
     cnt=0
     stps=5
     det=""
 
     while cnt < 14:
-        print("stps:",stps)
+        #print("stps:",stps)
 
         rr,dt=predict_pure_spatial_timeline(
             input_lat=latitude,
@@ -352,7 +349,7 @@ def get_earthquake_date(lat, lon, radius_km=50):
     }
     # 3. Request data from the API
         response = requests.get(url, params=params)
-        print(response)
+        #print(response)
         if response.status_code != 200:
             return f"Error: API returned status code {response.status_code}"
 
@@ -360,9 +357,10 @@ def get_earthquake_date(lat, lon, radius_km=50):
         features = data.get("features", [])
 
         if not features:
-            print ("No earthquakes found within this radius:"+str(radius_km))
+            st.write("No earthquakes found within this radius:"+str(radius_km))
             radius_km+=50
         else:
+            st.write(" earthquakes found within radius:"+str(radius_km))
           break
 
         cnt+=1
@@ -379,7 +377,8 @@ def get_earthquake_date(lat, lon, radius_km=50):
     return {
         "date_time": readable_date,
         "location_description": place,
-        "magnitude": magnitude
+        "magnitude": magnitude,
+        "radius_km": radius_km
     }
 
 def getDateCloseToOriginal(o_date,p_date):
@@ -539,61 +538,72 @@ def formatOutput(lat,lon,det):
     dt=quake_info['date_time']
     mag=quake_info['magnitude']
     add=quake_info['location_description']
+    rad=quake_info['radius_km']
 
     original_date = pd.to_datetime(dt).date()
 
     ret="###################################################################################"
     st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
     ret="<b>RECENT EARTHQUAKE:</b>"
-    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+    st.markdown("<span style='background-color: #FF4B4B;font-size: 14px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
     
     ret="Address   : <b>"+str(add)+"</>"
-    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
     ret="Date     :<b>"+str(original_date)+"</b>"
-    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
     ret="Magnitude :<b>"+str(mag)+"</b>"
-    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
-
+    st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+    ret="radius :<b>"+str(rad)+"</b>"
+    st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
     ret="------------------------------------------------------------------------------------"
     st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
     ret="<b>AI PREDICTION:</b>"
-    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+    st.markdown("<span style='background-color: #FF4B4B;font-size: 14px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
     dd,fd=getDateCloseToOriginal(original_date,det)
-    ret="        <i>AI prediction close to above earthquake:</i>"
-    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+    ret="<b><i>AI prediction close to above earthquake:</b></i>"
+    st.markdown("<p style='text-align: center; margin-bottom: 0px;'><span style='font-size: 10px;'>"+str(ret)+"</span></p>", unsafe_allow_html=True)
 
     i=1
     for rr in dd.split(","):
         if i == 1:
             ret="Date:<b>"+str(rr)+"</b>"
-            st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+            st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
         elif i == 2:
             ret="Magnitude:<b>"+str(rr)+"</b>"
-            st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+            st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
         elif i == 3:
             ret="Days away from predicted:<b>"+str(rr)+"/b"
-            st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+            st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
             i=0
         i+=1
 
-    ret="   <b><i> Future earthquakes prediction:</i></i>"
-    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
-
+    ret="   <b><i> Future earthquakes prediction:</i></b>"
+    #st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; margin-bottom: 0px;'><span style='font-size: 10px;'>"+str(ret)+"</span></p>", unsafe_allow_html=True)
+    i=1
     for rr in fd.split(","):
-        ret=str(rr)
-        st.markdown("<span style='font-size: 10px;'><b>"+str(ret)+"</b></span>", unsafe_allow_html=True)
+        #ret=str(rr)
+        #st.markdown("<p style='font-size: 10px;'><b>"+str(ret)+"</b></p>", unsafe_allow_html=True)
+   
+        if i == 1:
+            ret="Date:<b>"+str(rr)+"</b>"
+            st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
-        #ret="------------------------------------------"
-        #st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
-
+        elif i == 2:
+            ret="Magnitude:<b>"+str(rr)+"</b>"
+            st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+            i=0
+            
+        i+=1
+        
     ret="##########################################"
-    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
     #return ret
 
