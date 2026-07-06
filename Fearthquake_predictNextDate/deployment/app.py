@@ -6,6 +6,8 @@ from sklearn.cluster import KMeans
 from xgboost import XGBRegressor
 import numpy as np
 
+msg_textbox = st.empty()
+
 # Now you can safely import your function
 Folder_name="Fearthquake_predictNextDate"
 HF_username="hasilm1"
@@ -57,7 +59,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Main Title with an Emoji Anchor
-st.title("🌍 Earthquake Prediction App")
+st.title("🌍 blue[Earthquake Prediction App]")
 
 # Add a formatted sub-header for the version info
 #st.markdown("### :orange[[Beta Version 2.0]]")
@@ -78,7 +80,7 @@ def load_earthquake_data():
         st.error(f"CSV Load Error: {e}")
         return pd.DataFrame()
 
-dataset = load_earthquake_data()
+#dataset = load_earthquake_data()
 
 # 3. Geocoding Function
 def convertToLatLon(address_str):
@@ -109,7 +111,8 @@ else:
     text1 = st.text_input("Enter Latitude", value="")
     text2 = st.text_input("Enter Longitude", value="")
 
- 
+msg_textbox.warning("⚠️ wait for app to load...")
+        
 #latitude = st.number_input("latitude", min_value=-90.0, max_value=+90.0, value=34.05)
 #longitude = st.number_input("longitude", min_value=-180.0, max_value=+180.0, value=-118.24)
 
@@ -647,22 +650,7 @@ def formatOutput(lat,lon,det):
 
     #return ret
 
-# Prediction button
-#if st.button("Predict "):
-#    det=predict_pure_spatial_timeline(
-#    input_lat=latitude,
-#    input_lon=longitude,
-#    historical_grid_map=grid_map_spatial,
-#    kmeans_obj=spatial_kmeans,
-#    model_time=model_days,
-#    model_intensity=model_mag,
-#    steps=3)
-    
-    #lat,lon=convertToLatLon(address)
-#    dets=formatOutput(lat,lon)
-    
-#    st.subheader("Prediction Result:")
-#    st.success(f"The model predict: **{dets}**")
+msg_textbox.warning("")
 
 # 6. Action Submission Button
 if st.button("click to predict"):
@@ -695,7 +683,10 @@ if st.button("click to predict"):
             st.write(f" Longitude      : {text2}")
             st.write(f" Dataset Loaded : {len(dataset)}")
 
+    msg_textbox.warning("⚠️ wait for AI model to complete...")
     det=runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days,model_mag)
 
+    msg_textbox.warning("⚠️ loading output...")
     formatOutput(lat,longi,det)
+    msg_textbox.warning("")
 
