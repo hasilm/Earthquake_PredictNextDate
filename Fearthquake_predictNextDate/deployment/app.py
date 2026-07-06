@@ -591,7 +591,7 @@ def formatOutput(lat,lon,det):
     ret="Magnitude :<b>"+str(mag)+"</b>"
     st.markdown("<p style='font-size: 14px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
     ret="radius :<b>"+str(rad)+"</b>"
-    st.markdown("<p style='font-size: 14px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size: 14px;'>"+str(ret)+" km</p>", unsafe_allow_html=True)
     ret="------------------------------------------------------------------------------------"
     st.markdown("<span style='font-size: 14px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
@@ -645,11 +645,9 @@ def formatOutput(lat,lon,det):
             i=0 
         i+=1
         
-    ret="##########################################"
+    ret="###################################################################################"
     st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
-
-    #return ret
-
+    
 msg_textbox.warning("")
 
 # 6. Action Submission Button
