@@ -34,10 +34,10 @@ st.title("🌍 Earthquake Prediction App")
 
 # Add a formatted sub-header for the version info
 #st.markdown("### :orange[[Beta Version 2.0]]")
-st.markdown("<span style='font-size: 10px;'>[Beta Version 2.0]</span>", unsafe_allow_html=True)
+st.markdown("<span style='font-size: 14px;'>[Beta Version 2.0]</span>", unsafe_allow_html=True)
 
 st.divider() # Adds a clean horizontal line under the title block
-st.write("This application predicts the earthquake. Please enter the data below to get a prediction.")
+st.write("<i>This application predicts the earthquake. Please enter the data below to get a prediction.</i>")
 
 # 2. Fast CSV Data Loader (1,000 rows max)
 @st.cache_data # Caches data so it doesn't reload and slow down on every click
@@ -616,8 +616,7 @@ def formatOutput(lat,lon,det):
 
 # 6. Action Submission Button
 if st.button("click to predict"):
-    st.markdown("AI Prediction Date Response")
-
+ 
     lat=0.0
     longi=0.0
     if choice == "address":
@@ -626,10 +625,9 @@ if st.button("click to predict"):
         else:
             with st.spinner("Geocoding address..."):
                 latitude, longitude = convertToLatLon(text1)
-            st.success(f" Mode:** Address Lookup")
             st.write(f" Address Entered:** {text1}")
             st.write(f" Lat/Lon:** {latitude}, {longitude}")
-            st.write(f"**Dataset Rows Loaded:** {len(dataset)}")
+            st.write(f"**Dataset Rows Loaded:** {len(df)}")
             lat=latitude
             longi=longitude
     else:
@@ -638,7 +636,7 @@ if st.button("click to predict"):
         else:
             lat=text1
             longi=text2
-            st.success(f"**Mode:** Manual Coordinates")
+
             st.write(f"**Latitude:** {text1}")
             st.write(f"**Longitude:** {text2}")
             st.write(f"**Dataset Rows Loaded:** {len(dataset)}")
