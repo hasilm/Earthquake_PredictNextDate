@@ -57,7 +57,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Main Title with an Emoji Anchor
-st.title("🌍 blue[Earthquake Prediction App]")
+st.title("🌍 Earthquake Prediction App")
 
 # Add a formatted sub-header for the version info
 #st.markdown("### :orange[[Beta Version 2.0]]")
