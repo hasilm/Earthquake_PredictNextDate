@@ -568,16 +568,16 @@ def formatOutput(lat,lon,det):
     st.markdown("<span style='background-color: #FF4B4B;font-size: 18px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
     
     ret="Address   : <b>"+str(add)+"</>"
-    st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size: 14px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
     ret="Date     :<b>"+str(original_date)+"</b>"
-    st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size: 14px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
     ret="Magnitude :<b>"+str(mag)+"</b>"
-    st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size: 14px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
     ret="radius :<b>"+str(rad)+"</b>"
-    st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size: 14px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
     ret="------------------------------------------------------------------------------------"
-    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+    st.markdown("<span style='font-size: 14px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
     ret="<b>AI PREDICTION:</b>"
     st.markdown("<span style='background-color: #FF4B4B;font-size: 18px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
@@ -595,15 +595,15 @@ def formatOutput(lat,lon,det):
                     
         if i == 1:
             ret=str(cnt_i)+". Date:<b>"+str(rr)+"</b>"
-            st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+            st.markdown("<p style='font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
             cnt_i+=1
         elif i == 2:
             ret="Magnitude:<b>"+str(rr)+"</b>"
-            st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+            st.markdown("<p style='font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
         elif i == 3:
             ret="Days away from predicted:<b>"+str(rr)+"</b>"
-            st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+            st.markdown("<p style='font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
             i=0
         i+=1
@@ -621,11 +621,11 @@ def formatOutput(lat,lon,det):
                     
         if i == 1:
             ret=str(cnt_i)+". Date:<large><b>"+str(rr)+"</b></large>"
-            st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+            st.markdown("<p style='font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
             cnt_i+=1
         elif i == 2:
             ret="Magnitude:<large><b>"+str(rr)+"</b></large>"
-            st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+            st.markdown("<p style='font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
             i=0 
         i+=1
         
