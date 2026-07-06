@@ -28,6 +28,15 @@ from geopy.geocoders import Nominatim
 
 # 1. App Titles and Description
 #st.title("earthquake_predictNextDate App [beta version]")
+st.markdown("""
+    <style>
+    /* Targets the main radio widget group options */
+    div[data-testid="stRadio"] label p {
+        font-weight: bold !important;
+        color: #111111; /* Optional: Makes text crisp and dark */
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 # Main Title with an Emoji Anchor
 st.title("🌍 Earthquake Prediction App")
@@ -357,10 +366,14 @@ def get_earthquake_date(lat, lon, radius_km=50):
         features = data.get("features", [])
 
         if not features:
-            st.write("No earthquakes found within this radius:"+str(radius_km))
+            ttt="No earthquakes found within this radius:"+str(radius_km))
+            st.markdown("<p style='text-align: right; font-size: 14px;'><i>"+str(ttt)+"</i></p>", unsafe_allow_html=True)
+
             radius_km+=50
         else:
-            st.write(" earthquakes found within radius:"+str(radius_km))
+            ttt=" earthquakes found within radius:"+str(radius_km))
+            st.markdown("<p style='text-align: right; font-size: 14px;'><i>"+str(ttt)+"</i></p>", unsafe_allow_html=True)
+
             break
 
         cnt+=1
@@ -646,9 +659,12 @@ if st.button("click to predict"):
         else:
             with st.spinner("Geocoding address..."):
                 latitude, longitude = convertToLatLon(text1)
-            st.write(f" Address Entered : {text1}")
-            st.write(f" Lat/Lon         : {latitude}, {longitude}")
-            st.write(f"Dataset Loaded   : {len(df)}")
+            ttt=" Address Entered : "+str(text1)
+            st.markdown("<p style='text-align: right; font-size: 14px;'><b>"+str(ttt)+"</b></p>", unsafe_allow_html=True)
+            ttt=" Lat/Lon         : "str(latitude)+","+str(longitude)
+            st.markdown("<p style='text-align: right; font-size: 14px;'><b>"+str(ttt)+"</b></p>", unsafe_allow_html=True)
+            ttt=" Dataset Loaded   : "+str(len(df))
+            st.markdown("<p style='text-align: right; font-size: 14px;'><b>"+str(ttt)+"</b></p>", unsafe_allow_html=True)
                     
             lat=latitude
             longi=longitude
