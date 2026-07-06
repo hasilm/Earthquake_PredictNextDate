@@ -42,6 +42,17 @@ st.markdown("""
         font-weight: normal !important;
         font-size: 14px !important;
     }
+    /* 1. Makes the field label text above the box bold */
+    div[data-testid="stTextInput"] label[data-testid="stWidgetLabel"] p {
+        font-weight: bold !important;
+        font-size: 16px !important;
+    }
+    
+    /* 2. Forces the user-typed input text inside the box to be non-bold */
+    div[data-testid="stTextInput"] input {
+        font-weight: normal !important;
+        font-size: 15px !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
