@@ -361,7 +361,7 @@ def get_earthquake_date(lat, lon, radius_km=50):
             radius_km+=50
         else:
             st.write(" earthquakes found within radius:"+str(radius_km))
-          break
+            break
 
         cnt+=1
 
