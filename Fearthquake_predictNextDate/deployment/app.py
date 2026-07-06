@@ -64,7 +64,7 @@ st.title("🌍 Earthquake Prediction App")
 st.markdown("<p style='text-align: right; font-size: 14px;'>[ Beta Version 2.0 ]</p>", unsafe_allow_html=True)
             
 st.divider() # Adds a clean horizontal line under the title block
-st.markdown("<i>This application predicts the earthquake. Please enter the data below to get a prediction.</i>", unsafe_allow_html=True)
+st.markdown("<i>This application predicts earthquakes. Please enter the data below to get a prediction.</i>", unsafe_allow_html=True)
 msg_textbox = st.empty()
 
 # 2. Fast CSV Data Loader (1,000 rows max)
