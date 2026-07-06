@@ -608,7 +608,7 @@ def formatOutput(lat,lon,det):
             i=0
         i+=1
 
-    ret="   <b><i> Future earthquakes prediction:</i></b>"
+    ret="   <b><i> Future AI earthquakes prediction:</i></b>"
     st.markdown("<p style='text-align: left; margin-bottom: 0px;font-size: 16px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
     i=1
     cnt_i=1
