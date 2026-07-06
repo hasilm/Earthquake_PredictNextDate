@@ -565,7 +565,7 @@ def formatOutput(lat,lon,det):
     ret="###################################################################################"
     st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
     ret="<b>RECENT EARTHQUAKE:</b>"
-    st.markdown("<span style='background-color: #FF4B4B;font-size: 14px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+    st.markdown("<span style='background-color: #FF4B4B;font-size: 18px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
     
     ret="Address   : <b>"+str(add)+"</>"
     st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
@@ -580,11 +580,11 @@ def formatOutput(lat,lon,det):
     st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
     ret="<b>AI PREDICTION:</b>"
-    st.markdown("<span style='background-color: #FF4B4B;font-size: 14px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+    st.markdown("<span style='background-color: #FF4B4B;font-size: 18px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
     dd,fd=getDateCloseToOriginal(original_date,det)
-    ret="<b><i>AI prediction close to above earthquake:</b></i>"
-    st.markdown("<p style='text-align: center; margin-bottom: 0px;'><span style='font-size: 10px;'>"+str(ret)+"</span></p>", unsafe_allow_html=True)
+    ret="<b><i>AI prediction close to above earthquake:</i></b>"
+    st.markdown("<p style='text-align: left; margin-bottom: 0px;font-size: 16px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
     i=1
     cnt_i=1
@@ -609,8 +609,7 @@ def formatOutput(lat,lon,det):
         i+=1
 
     ret="   <b><i> Future earthquakes prediction:</i></b>"
-    #st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; margin-bottom: 0px;'><span style='font-size: 10px;'>"+str(ret)+"</span></p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: left; margin-bottom: 0px;font-size: 16px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
     i=1
     cnt_i=1
     for rr in fd.split(","):
