@@ -6,8 +6,6 @@ from sklearn.cluster import KMeans
 from xgboost import XGBRegressor
 import numpy as np
 
-msg_textbox = st.empty()
-
 # Now you can safely import your function
 Folder_name="Fearthquake_predictNextDate"
 HF_username="hasilm1"
@@ -67,6 +65,7 @@ st.markdown("<p style='text-align: right; font-size: 14px;'>[ Beta Version 2.0 ]
             
 st.divider() # Adds a clean horizontal line under the title block
 st.markdown("<i>This application predicts the earthquake. Please enter the data below to get a prediction.</i>", unsafe_allow_html=True)
+msg_textbox = st.empty()
 
 # 2. Fast CSV Data Loader (1,000 rows max)
 @st.cache_data # Caches data so it doesn't reload and slow down on every click
