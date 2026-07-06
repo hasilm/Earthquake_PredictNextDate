@@ -366,12 +366,12 @@ def get_earthquake_date(lat, lon, radius_km=50):
         features = data.get("features", [])
 
         if not features:
-            ttt="No earthquakes found within this radius:"+str(radius_km))
+            ttt="No earthquakes found within this radius:"+str(radius_km)
             st.markdown("<p style='text-align: right; font-size: 14px;'><i>"+str(ttt)+"</i></p>", unsafe_allow_html=True)
 
             radius_km+=50
         else:
-            ttt=" earthquakes found within radius:"+str(radius_km))
+            ttt=" earthquakes found within radius:"+str(radius_km)
             st.markdown("<p style='text-align: right; font-size: 14px;'><i>"+str(ttt)+"</i></p>", unsafe_allow_html=True)
 
             break
