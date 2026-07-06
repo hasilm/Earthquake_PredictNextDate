@@ -28,12 +28,19 @@ from geopy.geocoders import Nominatim
 
 # 1. App Titles and Description
 #st.title("earthquake_predictNextDate App [beta version]")
+
 st.markdown("""
     <style>
-    /* Targets the main radio widget group options */
-    div[data-testid="stRadio"] label p {
+    /* 1. Makes the main question/label bold */
+    div[data-testid="stRadio"] label[data-testid="stWidgetLabel"] p {
         font-weight: bold !important;
-        color: #111111; /* Optional: Makes text crisp and dark */
+        font-size: 16px !important;
+    }
+    
+    /* 2. Forces the option choices to remain normal (non-bold) weight */
+    div[data-testid="stRadio"] div[role="radiogroup"] label p {
+        font-weight: normal !important;
+        font-size: 14px !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -78,7 +85,7 @@ def convertToLatLon(address_str):
 # 4. Streamlit Radio Button Component
 choice = st.radio(
     "Select Input Method",
-    options=["address", "latitude/longitude"],
+    options=["address", "latitude,longitude"],
     index=0 # Sets 'address' as the default choice
 )
 
@@ -589,7 +596,7 @@ def formatOutput(lat,lon,det):
         if i == 1:
             ret=str(cnt_i)+". Date:<b>"+str(rr)+"</b>"
             st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
-
+            cnt_i+=1
         elif i == 2:
             ret="Magnitude:<b>"+str(rr)+"</b>"
             st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
@@ -600,7 +607,6 @@ def formatOutput(lat,lon,det):
 
             i=0
         i+=1
-        cnt_i+=1
 
     ret="   <b><i> Future earthquakes prediction:</i></b>"
     #st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
@@ -617,14 +623,12 @@ def formatOutput(lat,lon,det):
         if i == 1:
             ret=str(cnt_i)+". Date:<large><b>"+str(rr)+"</b></large>"
             st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
-
+            cnt_i+=1
         elif i == 2:
             ret="Magnitude:<large><b>"+str(rr)+"</b></large>"
             st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
-            i=0
-            
+            i=0 
         i+=1
-        cnt_i+=1
         
     ret="##########################################"
     st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
@@ -659,12 +663,12 @@ if st.button("click to predict"):
         else:
             with st.spinner("Geocoding address..."):
                 latitude, longitude = convertToLatLon(text1)
-            ttt=" Address Entered : "+str(text1)
-            st.markdown("<p style='text-align: right; font-size: 14px;'><b>"+str(ttt)+"</b></p>", unsafe_allow_html=True)
-            ttt=" Lat/Lon         : "+str(latitude)+","+str(longitude)
-            st.markdown("<p style='text-align: right; font-size: 14px;'><b>"+str(ttt)+"</b></p>", unsafe_allow_html=True)
-            ttt=" Dataset Loaded   : "+str(len(df))
-            st.markdown("<p style='text-align: right; font-size: 14px;'><b>"+str(ttt)+"</b></p>", unsafe_allow_html=True)
+            ttt=" Address Entered :<b> "+str(text1) +"</b>"
+            st.markdown("<p style=' font-size: 14px;'>"+str(ttt)+"</p>", unsafe_allow_html=True)
+            ttt=" Lat/Lon         : <b>"+str(latitude)+","+str(longitude)+"</b>"
+            st.markdown("<p style=' font-size: 14px;'>"+str(ttt)+"</p>", unsafe_allow_html=True)
+            ttt=" Dataset Loaded   : <b>"+str(len(df))+"</b>"
+            st.markdown("<p style=' font-size: 14px;'>"+str(ttt)+"</p>", unsafe_allow_html=True)
                     
             lat=latitude
             longi=longitude
