@@ -567,13 +567,14 @@ def formatOutput(lat,lon,det):
     st.markdown("<p style='text-align: center; margin-bottom: 0px;'><span style='font-size: 10px;'>"+str(ret)+"</span></p>", unsafe_allow_html=True)
 
     i=1
+    cnt_i=1
     for rr in dd.split(","):
 
         if rr == "":
             continue
                     
         if i == 1:
-            ret="Date:<b>"+str(rr)+"</b>"
+            ret=str(cnt_i)+". Date:<b>"+str(rr)+"</b>"
             st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
         elif i == 2:
@@ -586,11 +587,13 @@ def formatOutput(lat,lon,det):
 
             i=0
         i+=1
+        cnt_i+=1
 
     ret="   <b><i> Future earthquakes prediction:</i></b>"
     #st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; margin-bottom: 0px;'><span style='font-size: 10px;'>"+str(ret)+"</span></p>", unsafe_allow_html=True)
     i=1
+    cnt_i=1
     for rr in fd.split(","):
         #ret=str(rr)
         #st.markdown("<p style='font-size: 10px;'><b>"+str(ret)+"</b></p>", unsafe_allow_html=True)
@@ -599,7 +602,7 @@ def formatOutput(lat,lon,det):
             continue
                     
         if i == 1:
-            ret="Date:<large><b>"+str(rr)+"</b></large>"
+            ret=str(cnt_i)+". Date:<large><b>"+str(rr)+"</b></large>"
             st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
         elif i == 2:
@@ -608,6 +611,7 @@ def formatOutput(lat,lon,det):
             i=0
             
         i+=1
+        cnt_i+=1
         
     ret="##########################################"
     st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
