@@ -661,7 +661,7 @@ if st.button("click to predict"):
                 latitude, longitude = convertToLatLon(text1)
             ttt=" Address Entered : "+str(text1)
             st.markdown("<p style='text-align: right; font-size: 14px;'><b>"+str(ttt)+"</b></p>", unsafe_allow_html=True)
-            ttt=" Lat/Lon         : "str(latitude)+","+str(longitude)
+            ttt=" Lat/Lon         : "+str(latitude)+","+str(longitude)
             st.markdown("<p style='text-align: right; font-size: 14px;'><b>"+str(ttt)+"</b></p>", unsafe_allow_html=True)
             ttt=" Dataset Loaded   : "+str(len(df))
             st.markdown("<p style='text-align: right; font-size: 14px;'><b>"+str(ttt)+"</b></p>", unsafe_allow_html=True)
