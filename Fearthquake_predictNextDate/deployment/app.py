@@ -34,10 +34,10 @@ st.title("🌍 Earthquake Prediction App")
 
 # Add a formatted sub-header for the version info
 #st.markdown("### :orange[[Beta Version 2.0]]")
-st.markdown("<p style='text-align: right; font-size: 14px;'>orange[[ Beta Version 2.0 ]]</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: right; font-size: 14px;'>[ Beta Version 2.0 ]</p>", unsafe_allow_html=True)
             
 st.divider() # Adds a clean horizontal line under the title block
-st.write("<i>This application predicts the earthquake. Please enter the data below to get a prediction.</i>")
+st.markdown("<i>This application predicts the earthquake. Please enter the data below to get a prediction.</i>")
 
 # 2. Fast CSV Data Loader (1,000 rows max)
 @st.cache_data # Caches data so it doesn't reload and slow down on every click
@@ -568,6 +568,10 @@ def formatOutput(lat,lon,det):
 
     i=1
     for rr in dd.split(","):
+
+        if rr == "":
+            continue
+                    
         if i == 1:
             ret="Date:<b>"+str(rr)+"</b>"
             st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
@@ -577,7 +581,7 @@ def formatOutput(lat,lon,det):
             st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
         elif i == 3:
-            ret="Days away from predicted:<b>"+str(rr)+"/b"
+            ret="Days away from predicted:<b>"+str(rr)+"</b>"
             st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
             i=0
@@ -591,12 +595,15 @@ def formatOutput(lat,lon,det):
         #ret=str(rr)
         #st.markdown("<p style='font-size: 10px;'><b>"+str(ret)+"</b></p>", unsafe_allow_html=True)
    
+        if rr == "":
+            continue
+                    
         if i == 1:
-            ret="Date:<b>"+str(rr)+"</b>"
+            ret="Date:<large><b>"+str(rr)+"</b></large>"
             st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
         elif i == 2:
-            ret="Magnitude:<b>"+str(rr)+"</b>"
+            ret="Magnitude:<large><b>"+str(rr)+"</b></large>"
             st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
             i=0
             
@@ -635,9 +642,10 @@ if st.button("click to predict"):
         else:
             with st.spinner("Geocoding address..."):
                 latitude, longitude = convertToLatLon(text1)
-            st.write(f" Address Entered:** {text1}")
-            st.write(f" Lat/Lon:** {latitude}, {longitude}")
-            st.write(f"**Dataset Rows Loaded:** {len(df)}")
+            st.write(f" Address Entered : {text1}")
+            st.write(f" Lat/Lon         : {latitude}, {longitude}")
+            st.write(f"Dataset Loaded   : {len(df)}")
+                    
             lat=latitude
             longi=longitude
     else:
@@ -647,9 +655,9 @@ if st.button("click to predict"):
             lat=text1
             longi=text2
 
-            st.write(f"**Latitude:** {text1}")
-            st.write(f"**Longitude:** {text2}")
-            st.write(f"**Dataset Rows Loaded:** {len(dataset)}")
+            st.write(f" Latitude       : {text1}")
+            st.write(f" Longitude      : {text2}")
+            st.write(f" Dataset Loaded : {len(dataset)}")
 
     det=runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days,model_mag)
 
