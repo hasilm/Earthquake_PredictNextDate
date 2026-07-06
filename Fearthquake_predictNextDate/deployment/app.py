@@ -330,7 +330,7 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days
     stps=5
     det=""
 
-    while cnt < 14:
+    while cnt < 50:
         #print("stps:",stps)
 
         rr,dt=predict_pure_spatial_timeline(
@@ -680,7 +680,7 @@ if st.button("click to predict"):
             st.write(f" Longitude      : {text2}")
             st.write(f" Dataset Loaded : {len(dataset)}")
 
-    msg_textbox.warning("⚠️ wait for AI model to complete...")
+    msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for quake pron locations")
     det=runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days,model_mag)
 
     msg_textbox.warning("⚠️ loading output...")
