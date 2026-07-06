@@ -345,7 +345,7 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days
         det+=dt
 
         cnt+=1
-        msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for quake pron locations "+str(cnt))
+        msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for quake pron locations, "+str(cnt))
         
         if rr=="2":
             break
