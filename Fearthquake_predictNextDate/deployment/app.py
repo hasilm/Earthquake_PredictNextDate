@@ -566,7 +566,9 @@ def formatOutput(lat,lon,det):
     st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
     ret="<b>RECENT EARTHQUAKE:</b>"
     st.markdown("<span style='background-color: #FF4B4B;font-size: 18px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
-    
+    ret="<b><i>which is close to the address entered</i></b>"
+    st.markdown("<p style='text-align: left; margin-bottom: 0px;font-size: 12px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+
     ret="Address   : <b>"+str(add)+"</>"
     st.markdown("<p style='font-size: 14px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
