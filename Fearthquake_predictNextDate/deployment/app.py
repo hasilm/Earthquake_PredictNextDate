@@ -347,8 +347,8 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days
 
         cnt+=1
         msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for quake pron locations, "+str(cnt))
-        st.sidebar.empty()
-        st.sidebar.error(f"det: {det}")
+        #st.sidebar.empty()
+        #st.sidebar.error(f"det: {det}")
 
         if rr=="2":
             break
@@ -506,6 +506,7 @@ def getDateCloseToOriginal(o_date,p_date):
 
   #print("HD:",highest_date)
   ret="HD:"+str(highest_date) 
+  st.sidebar.empty()
   st.sidebar.error(f"det: {ret}")
     
   future_dates=""
