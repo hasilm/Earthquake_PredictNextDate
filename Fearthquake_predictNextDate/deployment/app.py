@@ -506,7 +506,6 @@ def getDateCloseToOriginal(o_date,p_date):
 
   #print("HD:",highest_date)
   ret="HD:"+str(highest_date) 
-  st.sidebar.empty()
   st.sidebar.error(f"det: {ret}")
     
   future_dates=""
