@@ -533,8 +533,7 @@ def getDateCloseToOriginal(o_date,p_date):
    
   f_date = pd.Timestamp(datetime.today())
   f_date = f_date.date()
-  ret="f_HD:"+str(f_date) 
-  st.sidebar.error(f"det: {ret}")
+  #ret="f_HD:"+str(f_date) 
 
   f_dates=""
   future_dates_cnt=0
@@ -551,6 +550,8 @@ def getDateCloseToOriginal(o_date,p_date):
   
     a = datetime.strptime(str(f_date), "%Y-%m-%d")
     b = datetime.strptime(str(clean_date), "%Y-%m-%d")
+    st.sidebar.error(f"fdates: "+str(a)+","+str(b))
+
     if a < b:
 
         if int(future_dates_cnt) >= 1:
@@ -559,6 +560,7 @@ def getDateCloseToOriginal(o_date,p_date):
 
         future_dates_cnt+=1
 
+  st.sidebar.error(f"ffdates: "+str(f_dates))
 
   pre_dates=str(close_date)+","+str(close_mag)+","+str(d_since)+","+str(close_date1)+","+str(close_mag1)+","+str(d_since1)+","+str(close_date2)+","+str(close_mag2)+","+str(d_since2)
   pre_dates+=","+str(future_dates)
