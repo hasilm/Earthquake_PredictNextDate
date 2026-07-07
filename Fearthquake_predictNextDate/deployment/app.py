@@ -502,7 +502,9 @@ def getDateCloseToOriginal(o_date,p_date):
     first_time=False
 
   #print("HD:",highest_date)
-   
+  ret="HD:"+str(highest_date) 
+  st.markdown("<p style='font-size: 14px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+
   future_dates=""
   future_dates_cnt=0
   for inn in p_date.split("#"):
@@ -528,7 +530,9 @@ def getDateCloseToOriginal(o_date,p_date):
    
   f_date = pd.Timestamp(datetime.today())
   f_date = f_date.date()
-  #print("f_HD:",f_date) 
+  ret="f_HD:"+str(f_date) 
+  st.markdown("<p style='font-size: 14px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+
   f_dates=""
   future_dates_cnt=0
   for inn in p_date.split("#"):
