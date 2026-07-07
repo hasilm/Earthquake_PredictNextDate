@@ -85,6 +85,8 @@ def load_earthquake_data():
 # 3. Geocoding Function
 def convertToLatLon(address_str):
     if not address_str or not address_str.strip():
+
+        st.sidebar.error(f"please enter proper address")
         return "0.0", "0.0"
     geolocator = Nominatim(user_agent="my_earthquake_pipeline_app_2026")
     try:
@@ -94,6 +96,8 @@ def convertToLatLon(address_str):
     except Exception as e:
         e_str=str(e)+str("<br>Please try after sometime.")
         st.sidebar.error(f"Geocoding error: {e_str}")
+
+    st.sidebar.error(f"please enter proper address")
     return "0.0", "0.0"
 
 # 4. Streamlit Radio Button Component
