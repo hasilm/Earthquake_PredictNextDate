@@ -91,6 +91,7 @@ def convertToLatLon(address_str):
         if location:
             return str(location.latitude), str(location.longitude)
     except Exception as e:
+        e=e+str("<br>Please try after sometime.")
         st.sidebar.error(f"Geocoding error: {e}")
     return "0.0", "0.0"
 
@@ -346,7 +347,8 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days
 
         cnt+=1
         msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for quake pron locations, "+str(cnt))
-        
+        st.sidebar.error(f"det: {det}")
+
         if rr=="2":
             break
         elif rr == "0":
@@ -503,8 +505,8 @@ def getDateCloseToOriginal(o_date,p_date):
 
   #print("HD:",highest_date)
   ret="HD:"+str(highest_date) 
-  st.markdown("<p style='font-size: 14px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
-
+  st.sidebar.error(f"det: {ret}")
+    
   future_dates=""
   future_dates_cnt=0
   for inn in p_date.split("#"):
@@ -531,7 +533,7 @@ def getDateCloseToOriginal(o_date,p_date):
   f_date = pd.Timestamp(datetime.today())
   f_date = f_date.date()
   ret="f_HD:"+str(f_date) 
-  st.markdown("<p style='font-size: 14px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+  st.sidebar.error(f"det: {ret}")
 
   f_dates=""
   future_dates_cnt=0
