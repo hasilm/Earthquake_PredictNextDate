@@ -25,6 +25,7 @@ longitude=0.0
 
 import os
 from geopy.geocoders import Nominatim
+st.sidebar.empty()
 
 # 1. App Titles and Description
 #st.title("earthquake_predictNextDate App [beta version]")
