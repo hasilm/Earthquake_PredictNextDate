@@ -510,7 +510,7 @@ def getDateCloseToOriginal(o_date,p_date):
     first_time=False
 
   #print("HD:",highest_date)
-  ret="HD:"+str(highest_date) 
+  #ret="HD:"+str(highest_date) 
     
   future_dates=""
   future_dates_cnt=0
@@ -526,15 +526,14 @@ def getDateCloseToOriginal(o_date,p_date):
   
     a = datetime.strptime(str(highest_date), "%Y-%m-%d")
     b = datetime.strptime(str(clean_date), "%Y-%m-%d")
-    rt=str(a)+" a,b "+str(b)
-    st.markdown("<span style='background-color: #FF4B4B;font-size: 18px;'>"+str(rt)+"</span>", unsafe_allow_html=True)
+    #rt=str(a)+" a,b "+str(b)
+    #st.markdown("<span style='background-color: #FF4B4B;font-size: 18px;'>"+str(rt)+"</span>", unsafe_allow_html=True)
 
     if a < b:
  
         if int(future_dates_cnt) >= 1:
             break
         future_dates+=str(clean_date)+","+str(mag)+","
-
         future_dates_cnt+=1
    
   f_date = pd.Timestamp(datetime.today())
@@ -558,8 +557,8 @@ def getDateCloseToOriginal(o_date,p_date):
     b = datetime.strptime(str(clean_date), "%Y-%m-%d")
     #st.sidebar.error(f"fdates: "+str(a)+","+str(b))
 
-    rt=str(a)+" a fu,b "+str(b)
-    st.markdown("<span style='background-color: #FF4B4B;font-size: 18px;'>"+str(rt)+"</span>", unsafe_allow_html=True)
+    #rt=str(a)+" a fu,b "+str(b)
+    #st.markdown("<span style='background-color: #FF4B4B;font-size: 18px;'>"+str(rt)+"</span>", unsafe_allow_html=True)
     if a < b:
 
         if int(future_dates_cnt) >= 1:
@@ -569,8 +568,8 @@ def getDateCloseToOriginal(o_date,p_date):
         future_dates_cnt+=1
 
   #st.sidebar.error(f"ffdates: "+str(f_dates))
-  rt=" future date , "+str(f_dates)
-  st.markdown("<span style='background-color: #FF4B4B;font-size: 18px;'>"+str(rt)+"</span>", unsafe_allow_html=True)
+  #rt=" future date , "+str(f_dates)
+  #st.markdown("<span style='background-color: #FF4B4B;font-size: 18px;'>"+str(rt)+"</span>", unsafe_allow_html=True)
 
   pre_dates=str(close_date)+","+str(close_mag)+","+str(d_since)+","+str(close_date1)+","+str(close_mag1)+","+str(d_since1)+","+str(close_date2)+","+str(close_mag2)+","+str(d_since2)
   pre_dates+=","+str(future_dates)
