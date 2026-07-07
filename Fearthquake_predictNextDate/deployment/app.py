@@ -91,8 +91,8 @@ def convertToLatLon(address_str):
         if location:
             return str(location.latitude), str(location.longitude)
     except Exception as e:
-        e=e+str("<br>Please try after sometime.")
-        st.sidebar.error(f"Geocoding error: {e}")
+        e_str=str(e)+str("<br>Please try after sometime.")
+        st.sidebar.error(f"Geocoding error: {e_str}")
     return "0.0", "0.0"
 
 # 4. Streamlit Radio Button Component
