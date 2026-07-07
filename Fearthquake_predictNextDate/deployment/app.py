@@ -511,7 +511,7 @@ def getDateCloseToOriginal(o_date,p_date):
 
   #print("HD:",highest_date)
   ret="HD:"+str(highest_date) 
-  #st.sidebar.error(f"det: {ret}")
+  st.sidebar.error(f"det: {ret}")
     
   future_dates=""
   future_dates_cnt=0
@@ -523,7 +523,8 @@ def getDateCloseToOriginal(o_date,p_date):
     mag=inn.split(",")[1]
 
     clean_date = pd.to_datetime(t_date).date()
-  
+    st.sidebar.error(f"clean_date: {clean_date}")
+
     #print("compare:",highest_date,clean_date)
   
     a = datetime.strptime(str(highest_date), "%Y-%m-%d")
