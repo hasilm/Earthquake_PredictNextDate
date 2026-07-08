@@ -657,7 +657,7 @@ def formatOutput(lat,lon,det):
                     
         if i == 1:
             ret=str(cnt_i)+". Date:<b>"+str(rr)+"</b>"
-            st.markdown("<p style='font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+            st.markdown("<p style='background-color: #808080;font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
             cnt_i+=1
         elif i == 2:
             ret="Magnitude:<b>"+str(rr)+"</b>"
@@ -683,7 +683,7 @@ def formatOutput(lat,lon,det):
                     
         if i == 1:
             ret=str(cnt_i)+". Date:<large><b>"+str(rr)+"</b></large>"
-            st.markdown("<p style='font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+            st.markdown("<p style='background-color: #808080;font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
             cnt_i+=1
         elif i == 2:
             ret="Magnitude:<large><b>"+str(rr)+"</b></large>"
