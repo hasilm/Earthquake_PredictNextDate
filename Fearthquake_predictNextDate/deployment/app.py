@@ -297,6 +297,7 @@ def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kme
     df['days_since_date_a'] = (df['future_date'] - date_a).dt.days
     days_since_date_a = df['days_since_date_a'].iloc[0]
 
+    st.write(days_since_date_a)
     if days_since_date_a > 400:
         print(" is greater than "+str(days_since_date_a))
         ret="0"
@@ -350,7 +351,7 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days
     stps=5
     det=""
 
-    while cnt < 50:
+    while cnt < 25:
         #print("stps:",stps)
 
         rr,dt=predict_pure_spatial_timeline(
