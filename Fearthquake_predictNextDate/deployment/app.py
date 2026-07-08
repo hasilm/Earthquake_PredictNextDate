@@ -25,7 +25,7 @@ longitude=0.0
 
 import os
 from geopy.geocoders import Nominatim
-#st.sidebar.empty()
+st.sidebar.empty()
 
 # 1. App Titles and Description
 #st.title("earthquake_predictNextDate App [beta version]")
@@ -703,10 +703,13 @@ if st.button("click to predict"):
             st.write(f" Longitude      : {text2}")
             st.write(f" Dataset Loaded : {len(dataset)}")
 
-    msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for quake pron locations")
-    det=runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days,model_mag)
+    if lat != 0.0:
+        msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for quake pron locations")
+        det=runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days,model_mag)
 
-    msg_textbox.warning("⚠️ loading output...")
-    formatOutput(lat,longi,det)
-    msg_textbox.warning("")
-
+        msg_textbox.warning("⚠️ loading output..."+str(len(det)))
+        formatOutput(lat,longi,det)
+        msg_textbox.warning("")
+    else:
+        st.warning("Please enter both Latitude and Longitude values.")
+        
