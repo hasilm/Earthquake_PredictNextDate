@@ -298,7 +298,7 @@ def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kme
     days_since_date_a = df['days_since_date_a'].iloc[0]
 
     #st.write(days_since_date_a)
-    st.sidebar.error(f"debug: "+str(days_since_date_a)+""+str(future_date))
+    #st.sidebar.error(f"debug: "+str(days_since_date_a)+""+str(future_date))
 
     if days_since_date_a > 400:
         print(" is greater than "+str(days_since_date_a))
