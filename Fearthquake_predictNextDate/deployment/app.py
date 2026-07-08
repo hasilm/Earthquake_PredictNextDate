@@ -314,11 +314,14 @@ def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kme
         print(" is less than "+str(days_since_date_a))
         ret="3"
         
-    elif days_since_date_a < -5 :
+    elif days_since_date_a < -50 :
         print(" is less than "+str(days_since_date_a))
         ret="4"
-    else:
+    elif days_since_date_a < -5 :
+        print(" is less than "+str(days_since_date_a))
         ret="5"
+    else:
+        ret="6"
 
     return ret,ret_desc
 
@@ -370,17 +373,19 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days
         #st.sidebar.empty()
         #st.sidebar.error(f"det: {det}")
 
-        if rr=="5":
+        if rr=="6":
             break
         elif rr == "0":
             stps-=5
         elif rr == "1":
-            stps+=50
+            stps+=1000
         elif rr == "2":
-            stps+=25
+            stps+=500
         elif rr == "3":
-            stps+=15
+            stps+=100
         elif rr == "4":
+            stps+=50
+        elif rr == "5":
             stps+=5
     return det
     
