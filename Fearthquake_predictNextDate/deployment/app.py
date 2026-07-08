@@ -65,13 +65,13 @@ st.title("🌍 Earthquake Prediction App")
 st.markdown("<p style='text-align: right; font-size: 14px;'>[ Beta Version 2.0 ]</p>", unsafe_allow_html=True)
             
 st.divider() # Adds a clean horizontal line under the title block
-st.markdown("<i>This application predicts earthquakes. Please enter the data below to get a prediction.</i>", unsafe_allow_html=True)
+st.markdown("<i>This application find earthquake patterns. Please enter the data below to get a probable prediction.</i>", unsafe_allow_html=True)
 msg_textbox = st.empty()
 
 # 2. Fast CSV Data Loader (1,000 rows max)
 @st.cache_data # Caches data so it doesn't reload and slow down on every click
 def load_earthquake_data():
-    csv_filename = "earthquake_data.csv"
+    #csv_filename = "earthquake_data.csv"
     csv_filename = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/df.csv"                      # enter the Hugging Face username here
 
     if not os.path.exists(csv_filename):
@@ -88,7 +88,7 @@ dataset = load_earthquake_data()
 def convertToLatLon(address_str):
     if not address_str or not address_str.strip():
 
-        #st.sidebar.error(f"please enter proper address")
+        st.sidebar.error(f"please enter proper address")
         return "0.0", "0.0"
     geolocator = Nominatim(user_agent="my_earthquake_pipeline_app_2026")
     try:
@@ -97,9 +97,9 @@ def convertToLatLon(address_str):
             return str(location.latitude), str(location.longitude)
     except Exception as e:
         e_str=str(e)+str("<br>Please try after sometime.")
-        #st.sidebar.error(f"Geocoding error: {e_str}")
+        st.sidebar.error(f"Geocoding error: {e_str}")
 
-    #st.sidebar.error(f"please enter proper address")
+    st.sidebar.error(f"please enter proper address")
     return "0.0", "0.0"
 
 # 4. Streamlit Radio Button Component
@@ -297,7 +297,9 @@ def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kme
     df['days_since_date_a'] = (df['future_date'] - date_a).dt.days
     days_since_date_a = df['days_since_date_a'].iloc[0]
 
-    st.write(days_since_date_a)
+    #st.write(days_since_date_a)
+    st.sidebar.error(f"debug: "+str(days_since_date_a)+""+str(future_date))
+
     if days_since_date_a > 400:
         print(" is greater than "+str(days_since_date_a))
         ret="0"
