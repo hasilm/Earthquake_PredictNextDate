@@ -123,7 +123,7 @@ msg_textbox.warning("⚠️ wait for app to load...")
 
 df_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/df.csv"                      # enter the Hugging Face username here
 df = pd.read_csv(df_path)
-dataset=len(df)
+dataset=df
 
 X_spatial_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/X_spatial.csv"                      # enter the Hugging Face username here
 X_spatial = pd.read_csv(X_spatial_path)
