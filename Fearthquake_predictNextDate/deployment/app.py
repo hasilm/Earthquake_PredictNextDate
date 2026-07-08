@@ -354,7 +354,7 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days
         det+=dt
 
         cnt+=1
-        msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for quake pron locations, "+str(cnt))
+        msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for quake pron location, "+str(cnt))
         #st.sidebar.empty()
         #st.sidebar.error(f"det: {det}")
 
@@ -679,7 +679,7 @@ if st.button("click to predict"):
     longi=0.0
     if choice == "address":
         if not text1.strip():
-            st.warning("Please type a valid address before submitting.")
+            msg_textbox.warning("Please type a valid address before submitting.")
         else:
             with st.spinner("Geocoding address..."):
                 latitude, longitude = convertToLatLon(text1)
@@ -694,7 +694,7 @@ if st.button("click to predict"):
             longi=longitude
     else:
         if not text1.strip() or not text2.strip():
-            st.warning("Please enter both Latitude and Longitude values.")
+            msg_textbox.warning("Please enter both Latitude and Longitude values.")
         else:
             lat=text1
             longi=text2
@@ -711,5 +711,5 @@ if st.button("click to predict"):
         formatOutput(lat,longi,det)
         msg_textbox.warning("")
     else:
-        st.warning("Please enter both Latitude and Longitude values.")
+        msg_textbox.warning("Please enter location details to proceed...")
         
