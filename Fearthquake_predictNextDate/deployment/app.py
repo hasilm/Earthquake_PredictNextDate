@@ -82,7 +82,7 @@ def load_earthquake_data():
         st.error(f"CSV Load Error: {e}")
         return pd.DataFrame()
 
-dataset = load_earthquake_data()
+#dataset = load_earthquake_data()
 
 # 3. Geocoding Function
 def convertToLatLon(address_str):
