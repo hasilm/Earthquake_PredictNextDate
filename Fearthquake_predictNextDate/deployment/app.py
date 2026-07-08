@@ -72,6 +72,8 @@ msg_textbox = st.empty()
 @st.cache_data # Caches data so it doesn't reload and slow down on every click
 def load_earthquake_data():
     csv_filename = "earthquake_data.csv"
+    csv_filename = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/df.csv"                      # enter the Hugging Face username here
+
     if not os.path.exists(csv_filename):
         return pd.DataFrame(columns=["Latitude", "Longitude", "Date"])
     try:
@@ -80,7 +82,7 @@ def load_earthquake_data():
         st.error(f"CSV Load Error: {e}")
         return pd.DataFrame()
 
-#dataset = load_earthquake_data()
+dataset = load_earthquake_data()
 
 # 3. Geocoding Function
 def convertToLatLon(address_str):
@@ -123,7 +125,7 @@ msg_textbox.warning("⚠️ wait for app to load...")
 
 df_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/df.csv"                      # enter the Hugging Face username here
 df = pd.read_csv(df_path)
-dataset=df
+#dataset=df
 
 X_spatial_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/X_spatial.csv"                      # enter the Hugging Face username here
 X_spatial = pd.read_csv(X_spatial_path)
