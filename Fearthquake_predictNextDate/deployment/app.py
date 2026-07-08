@@ -301,12 +301,23 @@ def predict_pure_spatial_timeline(input_lat, input_lon, historical_grid_map, kme
         print(" is greater than "+str(days_since_date_a))
         ret="0"
 
-    elif days_since_date_a < -5 :
+    elif days_since_date_a < -1000 :
         print(" is less than "+str(days_since_date_a))
         ret="1"
-
-    else:
+    
+    elif days_since_date_a < -500 :
+        print(" is less than "+str(days_since_date_a))
         ret="2"
+
+    elif days_since_date_a < -100 :
+        print(" is less than "+str(days_since_date_a))
+        ret="3"
+        
+    elif days_since_date_a < -5 :
+        print(" is less than "+str(days_since_date_a))
+        ret="4"
+    else:
+        ret="5"
 
     return ret,ret_desc
 
@@ -358,13 +369,18 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days
         #st.sidebar.empty()
         #st.sidebar.error(f"det: {det}")
 
-        if rr=="2":
+        if rr=="5":
             break
         elif rr == "0":
             stps-=5
         elif rr == "1":
+            stps+=50
+        elif rr == "2":
+            stps+=25
+        elif rr == "3":
+            stps+=15
+        elif rr == "4":
             stps+=5
-    
     return det
     
 import datetime
@@ -560,8 +576,8 @@ def getDateCloseToOriginal(o_date,p_date):
     b = datetime.strptime(str(clean_date), "%Y-%m-%d")
     #st.sidebar.error(f"fdates: "+str(a)+","+str(b))
 
-    rt=str(a)+" a fu,b "+str(b)
-    st.markdown("<span style='background-color: #FF4B4B;font-size: 18px;'>"+str(rt)+"</span>", unsafe_allow_html=True)
+    #rt=str(a)+" a fu,b "+str(b)
+    #st.markdown("<span style='background-color: #FF4B4B;font-size: 18px;'>"+str(rt)+"</span>", unsafe_allow_html=True)
     if a < b:
 
         if int(future_dates_cnt) >= 1:
@@ -706,8 +722,6 @@ if st.button("click to predict"):
     if lat != 0.0:
         msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for quake pron locations")
         det=runModelOutput(lat,longi,grid_map_spatial,spatial_kmeans,model_days,model_mag)
-
-        st.write(str(det))
 
         msg_textbox.warning("⚠️ loading output..."+str(len(det)))
         formatOutput(lat,longi,det)
