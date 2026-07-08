@@ -678,7 +678,7 @@ if st.button("click to predict"):
     lat=0.0
     longi=0.0
     if choice == "address":
-        if not text1.strip():
+        if text1.strip() == "":
             msg_textbox.warning("Please type a valid address before submitting.")
         else:
             with st.spinner("Geocoding address..."):
@@ -701,11 +701,13 @@ if st.button("click to predict"):
 
             st.write(f" Latitude       : {text1}")
             st.write(f" Longitude      : {text2}")
-            st.write(f" Dataset Loaded : {len(dataset)}")
+            st.write(f" Dataset Loaded : {len(df)}")
 
     if lat != 0.0:
         msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for quake pron locations")
-        det=runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days,model_mag)
+        det=runModelOutput(lat,longi,grid_map_spatial,spatial_kmeans,model_days,model_mag)
+
+        st.write(str(det))
 
         msg_textbox.warning("⚠️ loading output..."+str(len(det)))
         formatOutput(lat,longi,det)
