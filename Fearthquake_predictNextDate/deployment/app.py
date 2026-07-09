@@ -737,7 +737,7 @@ def formatOutput(lat,lon,det):
     ret="###################################################################################"
     st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
     ret="<b>RECENT EARTHQUAKE:</b>"
-    st.markdown("<span style='background-color: #FF4B4B;font-size: 18px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+    st.markdown("<p style='background-color: #ee4B4B;font-size: 18px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
     ret="<b><i>[which is close to the address entered]</i></b>"
     st.markdown("<p style='color: #ff0000;'text-align: left; margin-bottom: 0px;font-size: 12px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
@@ -754,7 +754,7 @@ def formatOutput(lat,lon,det):
     st.markdown("<span style='font-size: 14px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
     ret="<b>AI PREDICTION:</b>"
-    st.markdown("<span style='background-color: #FF4B4B;font-size: 18px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+    st.markdown("<p style='background-color: #ee4B4B;font-size: 18px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
     dd,fd=getDateCloseToOriginal(original_date,det)
     ret="<b><i>AI prediction close to above earthquake:</i></b>"
