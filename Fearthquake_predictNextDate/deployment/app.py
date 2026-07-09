@@ -452,6 +452,115 @@ def get_earthquake_date(lat, lon, radius_km=50):
     }
 
 def getDateCloseToOriginal(o_date,p_date):
+    #import datetime
+    from datetime import datetime
+
+    print(p_date)
+    dates_list=[]
+    mag_list=[]
+
+    for inn in p_date.split("#"):
+        if inn == "":
+            continue
+
+        t1_date=inn.split(",")[0]
+        #print("T1:",t1_date)
+
+        t_date = t1_date.split(" ")[0]
+        #print("T:",t_date)
+
+        mag=inn.split(",")[1]
+# Define your list of forecasted dates
+        dates_list.append(t_date)
+        mag_list.append(mag)
+
+    print("DATE:",dates_list)
+# Target date
+    #target_date = datetime.date(2026, 6, 1)
+    #target_date = datetime.strptime(str(o_date), "%Y-%m-%d")
+    target_str = str(o_date)
+    print("TARGET:",target_str)
+# Parse target date string into an object
+    target_date = datetime.strptime(target_str, "%Y-%m-%d").date()
+
+# Remove duplicates and convert string dates to date objects
+    unique_dates = {datetime.strptime(d, "%Y-%m-%d").date() for d in dates_list}
+
+# Sort the unique dates by their absolute difference from the target date
+    sorted_dates = sorted(unique_dates, key=lambda d: abs(d - target_date))
+
+# Filter to keep only dates strictly greater than the target date
+    future_dates = [d for d in unique_dates if d > target_date]
+
+# Sort the remaining future dates by proximity (smallest difference first)
+    sorted_future_dates = sorted(future_dates, key=lambda d: d - target_date)
+
+# Extract the top 3 closest future dates
+    future_three = sorted_future_dates[:3]
+  
+# Extract the top 3 closest dates
+    closest_three = sorted_dates[:4]
+
+# Convert them back to strings for presentation
+    closest_three_strs = [d.strftime("%Y-%m-%d") for d in closest_three]
+    closest_three_future = [d.strftime("%Y-%m-%d") for d in future_three]
+
+    print(f"Target Date: {target_str}")
+    print(f"Three Closest Dates: {closest_three_strs}")    
+    print(f"Three future Dates: {closest_three_future}")    
+    
+    close_dates=""
+    future_dates=""
+
+    for inn in closest_three_strs:
+        if inn == "":
+            continue
+
+        index=0
+        for dlist in dates_list:
+
+            t_date=dlist
+            
+            if inn == t_date:
+                mag=mag_list[index]
+
+                t_date_obj = datetime.strptime(t_date, "%Y-%m-%d").date()
+                target_date_obj = datetime.strptime(target_str, "%Y-%m-%d").date()
+
+                days_since = (t_date_obj - target_date_obj).days
+
+                close_dates+=str(t_date)+","+str(mag)+","+str(days_since)+","  
+                break
+                
+            index+=1
+
+    for inn in closest_three_future:
+        if inn == "":
+            continue
+
+        index=0
+        for dlist in dates_list:
+
+            t_date=dlist
+
+            if inn == t_date:
+                mag=mag_list[index]
+
+                t_date_obj = datetime.strptime(t_date, "%Y-%m-%d").date()
+                target_date_obj = datetime.strptime(target_str, "%Y-%m-%d").date()
+
+                days_since = (t_date_obj - target_date_obj).days
+
+                future_dates+=str(t_date)+","+str(mag)+","+str(days_since)+","  
+                break
+
+            index+=1
+
+    print(close_dates,future_dates)
+    
+    return close_dates,future_dates
+    
+def getDateCloseToOriginal1(o_date,p_date):
 
   from datetime import datetime
 
@@ -595,8 +704,8 @@ def getDateCloseToOriginal(o_date,p_date):
         future_dates_cnt+=1
 
   #st.sidebar.error(f"ffdates: "+str(f_dates))
-  rt=" future date , "+str(f_dates)
-  st.markdown("<span style='background-color: #FF4B4B;font-size: 18px;'>"+str(rt)+"</span>", unsafe_allow_html=True)
+  #rt=" future date , "+str(f_dates)
+  #st.markdown("<span style='background-color: #FF4B4B;font-size: 18px;'>"+str(rt)+"</span>", unsafe_allow_html=True)
 
   pre_dates=str(close_date)+","+str(close_mag)+","+str(d_since)+","+str(close_date1)+","+str(close_mag1)+","+str(d_since1)+","+str(close_date2)+","+str(close_mag2)+","+str(d_since2)
   pre_dates+=","+str(future_dates)
@@ -657,7 +766,7 @@ def formatOutput(lat,lon,det):
                     
         if i == 1:
             ret=str(cnt_i)+". Date:<b>"+str(rr)+"</b>"
-            st.markdown("<p style='background-color: #808080;font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+            st.markdown("<p style='background-color: #404040;font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
             cnt_i+=1
         elif i == 2:
             ret="Magnitude:<b>"+str(rr)+"</b>"
@@ -683,7 +792,7 @@ def formatOutput(lat,lon,det):
                     
         if i == 1:
             ret=str(cnt_i)+". Date:<large><b>"+str(rr)+"</b></large>"
-            st.markdown("<p style='background-color: #808080;font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+            st.markdown("<p style='background-color: #d18686;font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
             cnt_i+=1
         elif i == 2:
             ret="Magnitude:<large><b>"+str(rr)+"</b></large>"
