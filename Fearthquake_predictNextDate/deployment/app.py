@@ -488,6 +488,9 @@ def getDateCloseToOriginal(o_date,p_date):
 
 # Sort the unique dates by their absolute difference from the target date
     sorted_dates = sorted(unique_dates, key=lambda d: abs(d - target_date))
+   
+    from datetime import date
+    target_date = date.today()
 
 # Filter to keep only dates strictly greater than the target date
     future_dates = [d for d in unique_dates if d > target_date]
@@ -796,6 +799,9 @@ def formatOutput(lat,lon,det):
             cnt_i+=1
         elif i == 2:
             ret="Magnitude:<large><b>"+str(rr)+"</b></large>"
+            st.markdown("<p style='font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+        elif i == 3:
+            ret="Days away from today:<b>"+str(rr)+"</b>"
             st.markdown("<p style='font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
             i=0 
         i+=1
