@@ -769,7 +769,7 @@ def formatOutput(lat,lon,det):
                     
         if i == 1:
             ret=str(cnt_i)+". Date:<b>"+str(rr)+"</b>"
-            st.markdown("<p style='background-color: #404040;font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+            st.markdown("<p style='background-color: #fafafa;font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
             cnt_i+=1
         elif i == 2:
             ret="Magnitude:<b>"+str(rr)+"</b>"
