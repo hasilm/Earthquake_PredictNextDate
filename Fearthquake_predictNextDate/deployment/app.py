@@ -734,8 +734,8 @@ def formatOutput(lat,lon,det):
 
     original_date = pd.to_datetime(dt).date()
 
-    ret="###################################################################################"
-    st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+    #ret="###################################################################################"
+    #st.markdown("<span style='font-size: 10px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
     ret="<b>RECENT EARTHQUAKE:</b>"
     st.markdown("<p style='background-color: #ee4B4B;font-size: 18px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
     ret="<b><i>[which is close to the address entered]</i></b>"
@@ -750,8 +750,8 @@ def formatOutput(lat,lon,det):
     st.markdown("<p style='font-size: 14px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
     ret="radius :<b>"+str(rad)+"</b>"
     st.markdown("<p style='font-size: 14px;'>"+str(ret)+" km</p>", unsafe_allow_html=True)
-    ret="------------------------------------------------------------------------------------"
-    st.markdown("<span style='font-size: 14px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
+    #ret="------------------------------------------------------------------------------------"
+    #st.markdown("<span style='font-size: 14px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
     ret="<b>AI PREDICTION:</b>"
     st.markdown("<p style='background-color: #ee4B4B;font-size: 18px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
@@ -769,7 +769,7 @@ def formatOutput(lat,lon,det):
                     
         if i == 1:
             ret=str(cnt_i)+". Date:<b>"+str(rr)+"</b>"
-            st.markdown("<p style='background-color: #fafafa;font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+            st.markdown("<p style='background-color: #eaeaea;font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
             cnt_i+=1
         elif i == 2:
             ret="Magnitude:<b>"+str(rr)+"</b>"
@@ -806,8 +806,8 @@ def formatOutput(lat,lon,det):
             i=0 
         i+=1
         
-    ret="###################################################################################"
-    st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+    #ret="###################################################################################"
+    #st.markdown("<p style='font-size: 10px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
     
 msg_textbox.warning("")
 
