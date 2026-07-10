@@ -96,8 +96,9 @@ def convertToLatLon(address_str):
         if location:
             return str(location.latitude), str(location.longitude)
     except Exception as e:
-        e_str=str(e)+str("<br>Please try after sometime.")
+        e_str=str(e)+str(" Please try after sometime.")
         st.sidebar.error(f"Geocoding error: {e_str}")
+        return "0.0", "0.0"
 
     st.sidebar.error(f"please enter proper address")
     return "0.0", "0.0"
@@ -842,7 +843,7 @@ if st.button("click to predict"):
             st.write(f" Longitude      : {text2}")
             st.write(f" Dataset Loaded : {len(df)}")
 
-    if lat != 0.0:
+    if lat != "0.0":
         msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for quake pron locations")
         det=runModelOutput(lat,longi,grid_map_spatial,spatial_kmeans,model_days,model_mag)
 
