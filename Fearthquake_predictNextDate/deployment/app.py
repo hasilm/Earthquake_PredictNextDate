@@ -512,7 +512,7 @@ def getDateCloseToOriginal(o_date,p_date):
     close_dates=""
     future_dates=""
     
-    f_t_date = date.today()
+    f_t_date = date.today().strftime("%Y-%m-%d") 
     f_t_target_date_obj = datetime.strptime(f_t_date, "%Y-%m-%d").date()
 
     for inn in closest_three_strs:
@@ -528,9 +528,9 @@ def getDateCloseToOriginal(o_date,p_date):
                 mag=mag_list[index]
 
                 t_date_obj = datetime.strptime(t_date, "%Y-%m-%d").date()
-                #target_date_obj = datetime.strptime(target_str, "%Y-%m-%d").date()
+                target_date_obj = datetime.strptime(target_str, "%Y-%m-%d").date()
 
-                days_since = (t_date_obj - f_t_target_date_obj).days
+                days_since = (t_date_obj - target_date_obj).days
 
                 close_dates+=str(t_date)+","+str(mag)+","+str(days_since)+","  
                 break
@@ -550,9 +550,9 @@ def getDateCloseToOriginal(o_date,p_date):
                 mag=mag_list[index]
 
                 t_date_obj = datetime.strptime(t_date, "%Y-%m-%d").date()
-                target_date_obj = datetime.strptime(target_str, "%Y-%m-%d").date()
+                #target_date_obj = datetime.strptime(target_str, "%Y-%m-%d").date()
 
-                days_since = (t_date_obj - target_date_obj).days
+                days_since = (t_date_obj - f_t_target_date_obj).days
 
                 future_dates+=str(t_date)+","+str(mag)+","+str(days_since)+","  
                 break
