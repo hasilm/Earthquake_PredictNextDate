@@ -776,7 +776,7 @@ def formatOutput(lat,lon,det):
             st.markdown("<p style='font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
         elif i == 3:
-            ret="Days away from predicted:<b>"+str(rr)+"</b>"
+            ret="Actual days away from the predicted days:<b>"+str(rr)+"</b>"
             st.markdown("<p style='font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
             i=0
