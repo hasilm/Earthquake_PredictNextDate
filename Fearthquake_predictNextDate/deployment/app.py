@@ -475,9 +475,7 @@ def getDateCloseToOriginal(o_date,p_date):
         mag_list.append(mag)
 
     print("DATE:",dates_list)
-# Target date
-    #target_date = datetime.date(2026, 6, 1)
-    #target_date = datetime.strptime(str(o_date), "%Y-%m-%d")
+ 
     target_str = str(o_date)
     print("TARGET:",target_str)
 # Parse target date string into an object
@@ -490,8 +488,7 @@ def getDateCloseToOriginal(o_date,p_date):
     sorted_dates = sorted(unique_dates, key=lambda d: abs(d - target_date))
    
     from datetime import date
-    target_date = date.today()
-
+   
 # Filter to keep only dates strictly greater than the target date
     future_dates = [d for d in unique_dates if d > target_date]
 
@@ -514,6 +511,9 @@ def getDateCloseToOriginal(o_date,p_date):
     
     close_dates=""
     future_dates=""
+    
+    f_t_date = date.today()
+    f_t_target_date_obj = datetime.strptime(f_t_date, "%Y-%m-%d").date()
 
     for inn in closest_three_strs:
         if inn == "":
@@ -528,9 +528,9 @@ def getDateCloseToOriginal(o_date,p_date):
                 mag=mag_list[index]
 
                 t_date_obj = datetime.strptime(t_date, "%Y-%m-%d").date()
-                target_date_obj = datetime.strptime(target_str, "%Y-%m-%d").date()
+                #target_date_obj = datetime.strptime(target_str, "%Y-%m-%d").date()
 
-                days_since = (t_date_obj - target_date_obj).days
+                days_since = (t_date_obj - f_t_target_date_obj).days
 
                 close_dates+=str(t_date)+","+str(mag)+","+str(days_since)+","  
                 break
@@ -711,7 +711,7 @@ def getDateCloseToOriginal1(o_date,p_date):
   #st.markdown("<span style='background-color: #FF4B4B;font-size: 18px;'>"+str(rt)+"</span>", unsafe_allow_html=True)
 
   pre_dates=str(close_date)+","+str(close_mag)+","+str(d_since)+","+str(close_date1)+","+str(close_mag1)+","+str(d_since1)+","+str(close_date2)+","+str(close_mag2)+","+str(d_since2)
-  pre_dates+=","+str(future_dates)
+  #pre_dates+=","+str(future_dates)
   
   return pre_dates,f_dates
     
