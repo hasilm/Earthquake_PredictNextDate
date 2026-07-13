@@ -755,11 +755,11 @@ def formatOutput(lat,lon,det):
     #st.markdown("<span style='font-size: 14px;'>"+str(ret)+"</span>", unsafe_allow_html=True)
 
     ret="<b>AI PREDICTION:</b>"
-    st.markdown("<p style='background-color: #ee4B4B;font-size: 18px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+    st.markdown("<p style='background-color: #556B2F;font-size: 18px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
     dd,fd=getDateCloseToOriginal(original_date,det)
     ret="<b><i>AI prediction close to above earthquake:</i></b>"
-    st.markdown("<p style='text-align: left; margin-bottom: 0px;font-size: 16px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+    st.markdown("<p style='color: #556B2F;text-align: left; margin-bottom: 0px;font-size: 16px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
 
     i=1
     cnt_i=1
@@ -784,7 +784,7 @@ def formatOutput(lat,lon,det):
         i+=1
 
     ret="   <b><i> Future AI earthquakes prediction:</i></b>"
-    st.markdown("<p style='text-align: left; margin-bottom: 0px;font-size: 16px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+    st.markdown("<p style='color: #556B2F;text-align: left; margin-bottom: 0px;font-size: 16px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
     i=1
     cnt_i=1
     for rr in fd.split(","):
@@ -796,7 +796,7 @@ def formatOutput(lat,lon,det):
                     
         if i == 1:
             ret=str(cnt_i)+". Date:<large><b>"+str(rr)+"</b></large>"
-            st.markdown("<p style='background-color: #d18686;font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
+            st.markdown("<p style='background-color: #8b8c1d;font-size: 13px;'>"+str(ret)+"</p>", unsafe_allow_html=True)
             cnt_i+=1
         elif i == 2:
             ret="Magnitude:<large><b>"+str(rr)+"</b></large>"
