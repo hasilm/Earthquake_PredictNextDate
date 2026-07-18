@@ -27,9 +27,6 @@ import os
 from geopy.geocoders import Nominatim
 st.sidebar.empty()
 
-# 1. App Titles and Description
-#st.title("earthquake_predictNextDate App [beta version]")
-
 st.markdown("""
     <style>
     /* 1. Makes the main question/label bold */
@@ -61,8 +58,8 @@ st.markdown("""
 st.title("🌍 Earthquake Prediction App")
 
 # Add a formatted sub-header for the version info
-#st.markdown("### :orange[[Beta Version 2.0]]")
-st.markdown("<p style='text-align: right; font-size: 14px;'>[ Beta Version 2.0 ]</p>", unsafe_allow_html=True)
+#st.markdown("### :orange[[Beta Version 3.0]]")
+st.markdown("<p style='color: #ff5050;text-align: right; font-size: 14px;'>[ Beta Version 3.0 ]</p>", unsafe_allow_html=True)
             
 st.divider() # Adds a clean horizontal line under the title block
 st.markdown("<i>This application find earthquake patterns. Please enter the data below to get a probable prediction.</i>", unsafe_allow_html=True)
