@@ -94,7 +94,7 @@ def convertToLatLon(address_str):
             return str(location.latitude), str(location.longitude)
     except Exception as e:
         e_str=str(e)+str(" Please try after sometime.")
-        st.sidebar.error(f"Geocoding error: {e_str}")
+        st.sidebar.error(f"Geocoding error: Please try after sometime.")
         return "0.0", "0.0"
 
     st.sidebar.error(f"please enter proper address")
@@ -848,5 +848,5 @@ if st.button("click to predict"):
         formatOutput(lat,longi,det)
         msg_textbox.warning("")
     else:
-        msg_textbox.warning("Please enter location details to proceed...")
+        msg_textbox.warning("Please check location details or try after sometime...")
         
