@@ -353,7 +353,7 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days
     stps=5
     det=""
 
-    msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for quake pron locations")
+    msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for earthquake prone locations")
     while cnt < 25:
         #print("stps:",stps)
 
