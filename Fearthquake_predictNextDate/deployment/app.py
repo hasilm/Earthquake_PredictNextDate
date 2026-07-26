@@ -353,6 +353,7 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days
     stps=5
     det=""
 
+    msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for quake pron locations")
     while cnt < 25:
         #print("stps:",stps)
 
@@ -844,7 +845,7 @@ if st.button("click to predict"):
             st.write(f" Dataset Loaded : {len(df)}")
 
     if lat != "0.0":
-        msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for quake pron locations")
+        msg_textbox.warning(" please re-try once more, something went wrong.")
         det=runModelOutput(lat,longi,grid_map_spatial,spatial_kmeans,model_days,model_mag)
 
         msg_textbox.warning("⚠️ loading output..."+str(len(det)))
