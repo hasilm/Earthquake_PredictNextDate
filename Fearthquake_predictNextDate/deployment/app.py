@@ -394,7 +394,7 @@ import requests
 
 def get_earthquake_date(lat, lon, radius_km=50):
 
-    radius_coverage_km=10
+    radius_coverage_km=11
 
     # 1. Construct the USGS API endpoint URL
     url = "https://earthquake.usgs.gov/fdsnws/event/1/query"
@@ -410,7 +410,7 @@ def get_earthquake_date(lat, lon, radius_km=50):
         "longitude": lon,
         "maxradiuskm": radius_km,
         "orderby": "time"  # Puts the newest earthquake first
-    }
+        }
     # 3. Request data from the API
         response = requests.get(url, params=params)
         #print(response)
@@ -849,6 +849,7 @@ if st.button("click to predict"):
         det=runModelOutput(lat,longi,grid_map_spatial,spatial_kmeans,model_days,model_mag)
 
         msg_textbox.warning("⚠️ loading output..."+str(len(det)))
+        msg_textbox.warning("⚠️ could not find any earthequake within 500km..")
         formatOutput(lat,longi,det)
         msg_textbox.warning("")
     else:
