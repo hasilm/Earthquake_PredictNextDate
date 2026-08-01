@@ -58,7 +58,7 @@ st.markdown("""
 st.title("🌍 Earthquake Prediction App")
 
 # Add a formatted sub-header for the version info
-st.markdown("<p style='color: #ff5050;text-align: right; font-size: 14px;'>[ Beta Version 3.1 ]</p>", unsafe_allow_html=True)
+st.markdown("<p style='color: #ff5050;text-align: right; font-size: 14px;'>[ Beta Version 3.2 ]</p>", unsafe_allow_html=True)
             
 st.divider() # Adds a clean horizontal line under the title block
 st.markdown("<i>This application find earthquake patterns. Please enter the data below to get a probable prediction.</i>", unsafe_allow_html=True)
@@ -395,14 +395,11 @@ import requests
 def get_earthquake_date(lat, lon, radius_km=50):
 
     radius_coverage_km=11
-
     # 1. Construct the USGS API endpoint URL
     url = "https://earthquake.usgs.gov/fdsnws/event/1/query"
-
     # 2. Define the geographic search parameters
-
-
     cnt=0
+    
     while cnt < radius_coverage_km:
         params = {
         "format": "geojson",
@@ -431,6 +428,8 @@ def get_earthquake_date(lat, lon, radius_km=50):
 
             break
 
+        if int(cnt) >= 10:
+            break
         cnt+=1
 
     # 4. Extract the most recent earthquake event properties
