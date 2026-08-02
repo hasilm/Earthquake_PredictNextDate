@@ -341,7 +341,7 @@ spatial_kmeans.fit(X_spatial[['latitude', 'longitude']]) # Fit KMeans here
 #42.360°N 126.573°W
 #spatial_kmeans = KMeans(n_clusters=25, random_state=42, n_init='auto')
 
-def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,optimizeFlag,model_days_spatial=null,model_days_spatial=null):
+def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,optimizeFlag,model_days_spatial=null,model_mag_spatial=null):
     cnt=0
     stps=5
     det=""
