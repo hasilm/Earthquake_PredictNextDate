@@ -341,11 +341,13 @@ spatial_kmeans.fit(X_spatial[['latitude', 'longitude']]) # Fit KMeans here
 #42.360°N 126.573°W
 #spatial_kmeans = KMeans(n_clusters=25, random_state=42, n_init='auto')
 
-def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,optimizeFlag,model_days_spatial="",model_mag_spatial=""):
+def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,optimizeFlag):
     cnt=0
     stps=5
     det=""
-
+    
+    model_days_spatial=""
+    model_mag_spatial=""
     if optimizeFlag:
         Model_name1="earthquake_predict_date_model_v1.joblib"
         Model_name2="earthquake_predict_mag_model_v1.joblib"
