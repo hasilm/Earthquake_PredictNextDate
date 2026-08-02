@@ -106,7 +106,7 @@ else:
     text1 = st.text_input("Enter Latitude", value="")
     text2 = st.text_input("Enter Longitude", value="")
 
-include_stochastic = st.checkbox("Optimized mode")
+include_stochastic = st.checkbox("RandomizedSearch mode")
     
 msg_textbox.warning("⚠️ wait for app to load...")
         
