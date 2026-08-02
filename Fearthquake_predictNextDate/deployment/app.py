@@ -11,38 +11,6 @@ Folder_name="Fearthquake_predictNextDate"
 HF_username="hasilm1"
 App_name="earthquake_predictNextDate"
 
-Model_name1="earthquake_predict_date_model_v1.joblib"
-Model_name2="earthquake_predict_mag_model_v1.joblib"
-
-# Download and load the model
-#model_path = hf_hub_download(repo_id=str(HF_username)+"/"+str(App_name), filename=Model_name1) # enter the Hugging Face username here
-#model_days = joblib.load(model_path)
-#model_path = hf_hub_download(repo_id=str(HF_username)+"/"+str(App_name), filename=Model_name2) # enter the Hugging Face username here
-#model_mag = joblib.load(model_path)
-
-import requests
-import io
-
-url = "https://huggingface.co"
-import pandas as pd
-import requests
-import io
-
-ymag_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/ymag.csv"                      # enter the Hugging Face username here
-X_spatial_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/X_spatial.csv"                    # enter the Hugging Face username here
-y_days_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/y_days.csv"                      # enter the Hugging Face username here
-
-y_mag = pd.read_csv(ymag_path)
-X_spatial = pd.read_csv(X_spatial_path)
-y_days = pd.read_csv(y_days_path)
-
-model_days = XGBRegressor(n_estimators=400, max_depth=6, learning_rate=0.03, random_state=42)
-model_days.fit(X_spatial, y_days)
-
-# Train Spatial Magnitude Model
-model_mag = XGBRegressor(n_estimators=400, max_depth=5, learning_rate=0.03, random_state=42)
-model_mag.fit(X_spatial, y_mag)
-
 latitude=0.0
 longitude=0.0
 
@@ -138,6 +106,8 @@ else:
     text1 = st.text_input("Enter Latitude", value="")
     text2 = st.text_input("Enter Longitude", value="")
 
+include_stochastic = st.checkbox("Optimized mode")
+    
 msg_textbox.warning("⚠️ wait for app to load...")
         
 #latitude = st.number_input("latitude", min_value=-90.0, max_value=+90.0, value=34.05)
@@ -371,10 +341,43 @@ spatial_kmeans.fit(X_spatial[['latitude', 'longitude']]) # Fit KMeans here
 #42.360°N 126.573°W
 #spatial_kmeans = KMeans(n_clusters=25, random_state=42, n_init='auto')
 
-def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,model_days_spatial,model_mag_spatial):
+def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,optimizeFlag,model_days_spatial=null,model_days_spatial=null):
     cnt=0
     stps=5
     det=""
+
+    if optimizeFlag:
+        Model_name1="earthquake_predict_date_model_v1.joblib"
+        Model_name2="earthquake_predict_mag_model_v1.joblib"
+
+        # Download and load the model
+        model_path = hf_hub_download(repo_id=str(HF_username)+"/"+str(App_name), filename=Model_name1) # enter the Hugging Face username here
+        model_days_spatial = joblib.load(model_path)
+        model_path = hf_hub_download(repo_id=str(HF_username)+"/"+str(App_name), filename=Model_name2) # enter the Hugging Face username here
+        model_mag_spatial = joblib.load(model_path)
+    else:
+        import requests
+        import io
+
+        url = "https://huggingface.co"
+        import pandas as pd
+        import requests
+        import io
+
+        ymag_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/ymag.csv"                      # enter the Hugging Face username here
+        X_spatial_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/X_spatial.csv"                    # enter the Hugging Face username here
+        y_days_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/y_days.csv"                      # enter the Hugging Face username here
+
+        y_mag = pd.read_csv(ymag_path)
+        X_spatial = pd.read_csv(X_spatial_path)
+        y_days = pd.read_csv(y_days_path)
+
+        model_days_spatial = XGBRegressor(n_estimators=400, max_depth=6, learning_rate=0.03, random_state=42)
+        model_days_spatial.fit(X_spatial, y_days)
+
+        # Train Spatial Magnitude Model
+        model_mag_spatial = XGBRegressor(n_estimators=400, max_depth=5, learning_rate=0.03, random_state=42)
+        model_mag_spatial.fit(X_spatial, y_mag)
 
     msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for earthquake prone locations")
     while cnt < 25:
@@ -865,10 +868,14 @@ if st.button("click to predict"):
             st.write(f" Latitude       : {text1}")
             st.write(f" Longitude      : {text2}")
             st.write(f" Dataset Loaded : {len(df)}")
-
+  
+    optimizeFlag=False
+    if include_stochastic:
+        optimizeFlag=True
+    
     if lat != "0.0":
         msg_textbox.warning(" please re-try once more, something went wrong.")
-        det=runModelOutput(lat,longi,grid_map_spatial,spatial_kmeans,model_days,model_mag)
+        det=runModelOutput(lat,longi,grid_map_spatial,spatial_kmeans,optimizeFlag)
 
         msg_textbox.warning("⚠️ loading output..."+str(len(det)))
         msg_textbox.warning("⚠️ could not find any earthequake within 500km..")
