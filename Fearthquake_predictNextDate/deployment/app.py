@@ -872,7 +872,9 @@ if st.button("click to predict"):
             st.write(f" Dataset Loaded : {len(df)}")
   
     optimizeFlag=False
+    mode_Str="not optimized"
     if include_stochastic:
+        mode_Str="optimized"
         optimizeFlag=True
     
     if lat != "0.0":
@@ -882,6 +884,8 @@ if st.button("click to predict"):
         msg_textbox.warning("⚠️ loading output..."+str(len(det)))
         msg_textbox.warning("⚠️ could not find any earthequake within 500km..")
         formatOutput(lat,longi,det)
+        st.markdown("<p style='color: #aa0000;text-align: left; margin-bottom: 0px;font-size: 12px;'>mode : <b>"+str(mode_Str)+" ]</b></p>", unsafe_allow_html=True)
+
         msg_textbox.warning("")
     else:
         msg_textbox.warning("Please check location details or try after sometime...")
