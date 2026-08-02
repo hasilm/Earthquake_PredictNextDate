@@ -20,15 +20,26 @@ Model_name2="earthquake_predict_mag_model_v1.joblib"
 #model_path = hf_hub_download(repo_id=str(HF_username)+"/"+str(App_name), filename=Model_name2) # enter the Hugging Face username here
 #model_mag = joblib.load(model_path)
 
-repo_url="https://huggingface.co/datasets/hasilm1/Earthquake_PredictNextDate/tree/main"
-spatial_url = f"{repo_url}/X_spatial.csv"
-X_spatial = pd.read_csv(spatial_url)
+import requests
+import io
 
-spatial_url = f"{repo_url}/y_days.csv"
-y_days = pd.read_csv(spatial_url)
+url = "https://huggingface.co"
 
-spatial_url = f"{repo_url}/y_mag.csv"
-y_mag = pd.read_csv(spatial_url)
+# Download the file content into memory
+
+# Read the in-memory string directly as a CSV file
+
+repo_url="https://huggingface.co/datasets/hasilm1/Earthquake_PredictNextDate/tree/main/X_spatial.csv"
+response = requests.get(repo_url)
+X_spatial = pd.read_csv(io.StringIO(response.text))
+
+repo_url="https://huggingface.co/datasets/hasilm1/Earthquake_PredictNextDate/tree/main/y_days.csv"
+response = requests.get(repo_url)
+y_days = pd.read_csv(io.StringIO(response.text))
+
+repo_url="https://huggingface.co/datasets/hasilm1/Earthquake_PredictNextDate/tree/main/y_mag.csv"
+response = requests.get(repo_url)
+y_mag = pd.read_csv(io.StringIO(response.text))
 
 model_days = XGBRegressor(n_estimators=400, max_depth=6, learning_rate=0.03, random_state=42)
 model_days.fit(X_spatial, y_days)
