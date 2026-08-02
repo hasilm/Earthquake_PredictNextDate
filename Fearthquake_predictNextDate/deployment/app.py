@@ -106,7 +106,12 @@ else:
     text1 = st.text_input("Enter Latitude", value="")
     text2 = st.text_input("Enter Longitude", value="")
 
-include_stochastic = st.checkbox("RandomizedSearch mode")
+modes = st.radio(
+    "Select Mode",
+    options=["Normal", "RandomizedSearch"],
+    index=0 # Sets 'address' as the default choice
+)
+#include_stochastic = st.checkbox("RandomizedSearch mode")
     
 msg_textbox.warning("⚠️ wait for app to load...")
         
@@ -907,9 +912,10 @@ if st.button("click to predict"):
             st.write(f" Dataset Loaded : {len(df)}")
   
     optimizeFlag=False
-    mode_Str="not optimized"
-    if include_stochastic:
-        mode_Str="optimized"
+    
+    mode_Str="Normal"
+    if modes == "RandomizedSearch":
+        mode_Str="RandomizedSearch"
         optimizeFlag=True
     
     if lat != "0.0":
@@ -917,6 +923,7 @@ if st.button("click to predict"):
             msg_textbox.warning(" RandomizedSearch mode takes more time to complete.")
         else:        
             msg_textbox.warning(" please re-try once more, something went wrong.")
+            
         det=runModelOutput(lat,longi,grid_map_spatial,spatial_kmeans,optimizeFlag)
 
         msg_textbox.warning("⚠️ loading output..."+str(len(det)))
