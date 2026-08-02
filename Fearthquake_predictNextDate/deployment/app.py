@@ -348,7 +348,7 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,optimizeFl
     
     model_days_spatial=""
     model_mag_spatial=""
-    if optimizeFlag:
+    if optimizeFlag == False:
         Model_name1="earthquake_predict_date_model_v1.joblib"
         Model_name2="earthquake_predict_mag_model_v1.joblib"
 
@@ -884,7 +884,7 @@ if st.button("click to predict"):
         msg_textbox.warning("⚠️ loading output..."+str(len(det)))
         msg_textbox.warning("⚠️ could not find any earthequake within 500km..")
         formatOutput(lat,longi,det)
-        st.markdown("<p style='color: #aa0000;text-align: left; margin-bottom: 0px;font-size: 12px;'>mode : <b>"+str(mode_Str)+" ]</b></p>", unsafe_allow_html=True)
+        st.markdown("<p style='color: #aa0000;text-align: left; margin-bottom: 0px;font-size: 12px;'>mode : <b>"+str(mode_Str)+"</b></p>", unsafe_allow_html=True)
 
         msg_textbox.warning("")
     else:
