@@ -20,9 +20,9 @@ Model_name2="earthquake_predict_mag_model_v1.joblib"
 #model_path = hf_hub_download(repo_id=str(HF_username)+"/"+str(App_name), filename=Model_name2) # enter the Hugging Face username here
 #model_mag = joblib.load(model_path)
 
-X_spatial = hf_hub_download(repo_id=str(HF_username)+"/"+str(App_name), filename="X_spatial.csv") # enter the Hugging Face username here
-y_days = hf_hub_download(repo_id=str(HF_username)+"/"+str(App_name), filename="y_days.csv") # enter the Hugging Face username here
-y_mag = hf_hub_download(repo_id=str(HF_username)+"/"+str(App_name), filename="y_mag.csv") # enter the Hugging Face username here
+X_spatial = hf_hub_download(repo_id=str(HF_username)+"/"+str(App_name), filename="X_spatial") # enter the Hugging Face username here
+y_days = hf_hub_download(repo_id=str(HF_username)+"/"+str(App_name), filename="y_days") # enter the Hugging Face username here
+y_mag = hf_hub_download(repo_id=str(HF_username)+"/"+str(App_name), filename="y_mag") # enter the Hugging Face username here
 
 model_days = XGBRegressor(n_estimators=400, max_depth=6, learning_rate=0.03, random_state=42)
 model_days.fit(X_spatial, y_days)
