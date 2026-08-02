@@ -28,18 +28,17 @@ url = "https://huggingface.co"
 # Download the file content into memory
 
 # Read the in-memory string directly as a CSV file
+storage_options = {'User-Agent': 'Mozilla/5.0'}
 
-repo_url="https://huggingface.co/datasets/hasilm1/Earthquake_PredictNextDate/tree/main/X_spatial.csv"
-response = requests.get(repo_url)
-X_spatial = pd.read_csv(io.StringIO(response.text))
+url="https://huggingface.co/datasets/hasilm1/Earthquake_PredictNextDate/tree/main/X_spatial.csv"
+X_spatial = pd.read_csv(url, sep=None, engine='python', storage_options=storage_options)
 
-repo_url="https://huggingface.co/datasets/hasilm1/Earthquake_PredictNextDate/tree/main/y_days.csv"
-response = requests.get(repo_url)
-y_days = pd.read_csv(io.StringIO(response.text))
+url="https://huggingface.co/datasets/hasilm1/Earthquake_PredictNextDate/tree/main/y_days.csv"
+y_days = pd.read_csv(url, sep=None, engine='python', storage_options=storage_options)
 
-repo_url="https://huggingface.co/datasets/hasilm1/Earthquake_PredictNextDate/tree/main/y_mag.csv"
-response = requests.get(repo_url)
-y_mag = pd.read_csv(io.StringIO(response.text))
+url="https://huggingface.co/datasets/hasilm1/Earthquake_PredictNextDate/tree/main/y_mag.csv"
+y_mag = pd.read_csv(url, sep=None, engine='python', storage_options=storage_options)
+ 
 
 model_days = XGBRegressor(n_estimators=400, max_depth=6, learning_rate=0.03, random_state=42)
 model_days.fit(X_spatial, y_days)
