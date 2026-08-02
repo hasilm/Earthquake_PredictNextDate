@@ -30,7 +30,7 @@ import io
 
 # 1. Define your file URL and token
 
-hf_token="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"
+hf_token = HfApi(token=os.getenv("HF_TOKEN"))
 
 headers = {
     "Authorization": f"Bearer {hf_token}",
