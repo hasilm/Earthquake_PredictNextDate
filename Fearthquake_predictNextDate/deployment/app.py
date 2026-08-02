@@ -49,7 +49,7 @@ st.markdown("""
 st.title("🌍 Earthquake Prediction App")
 
 # Add a formatted sub-header for the version info
-st.markdown("<p style='color: #ff5050;text-align: right; font-size: 14px;'>[ Beta Version 3.2 ]</p>", unsafe_allow_html=True)
+st.markdown("<p style='color: #ff5050;text-align: right; font-size: 14px;'>[ Beta Version 4.0 ]</p>", unsafe_allow_html=True)
             
 st.divider() # Adds a clean horizontal line under the title block
 st.markdown("<i>This application find earthquake patterns. Please enter the data below to get a probable prediction.</i>", unsafe_allow_html=True)
