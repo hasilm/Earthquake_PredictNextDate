@@ -919,7 +919,7 @@ if st.button("click to predict"):
         det=runModelOutput(lat,longi,grid_map_spatial,spatial_kmeans,optimizeFlag)
 
         msg_textbox.warning("⚠️ loading output..."+str(len(det)))
-        msg_textbox.warning("⚠️ could not find any earthequake within 500km..")
+        #msg_textbox.warning("⚠️ could not find any earthequake within 500km..")
         formatOutput(lat,longi,det)
         st.markdown("<p style='color: #aa0000;text-align: left; margin-bottom: 0px;font-size: 12px;'>mode : <b>"+str(mode_Str)+"</b></p>", unsafe_allow_html=True)
 
