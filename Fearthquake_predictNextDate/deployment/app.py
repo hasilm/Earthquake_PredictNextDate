@@ -384,11 +384,12 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,optimizeFl
         from sklearn.model_selection import RandomizedSearchCV
 
         param_distributions = {
-            'max_depth':[None],
+            'max_depth':[2,6],
             'learning_rate': [0.01, 0.03, 0.1],
             'subsample': [0.7, 0.8, 0.9],
-            'colsample_bytree': [0.7, 0.8, 0.9]
-        }
+            'colsample_bytree': [0.7, 0.8, 0.9],
+           'n_estimators': [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+           }
 
         search = RandomizedSearchCV(
             estimator=model_days_spatial,
