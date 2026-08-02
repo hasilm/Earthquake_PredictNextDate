@@ -258,20 +258,9 @@ api.upload_file(
 )
 # create_repo("best_machine_failure_model", repo_type="model", private=False)
 api.upload_file(
-    path_or_fileobj="X_spatial",
-    path_in_repo="X_spatial",
+    path_or_fileobj=Model_name2,
+    path_in_repo=Model_name2,
     repo_id=repo_id,
     repo_type=repo_type,
 )
-api.upload_file(
-    path_or_fileobj="y_days",
-    path_in_repo="y_days",
-    repo_id=repo_id,
-    repo_type=repo_type,
-)
-api.upload_file(
-    path_or_fileobj="y_mag",
-    path_in_repo="y_mag",
-    repo_id=repo_id,
-    repo_type=repo_type,
-)
+ 
