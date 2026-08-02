@@ -375,11 +375,45 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,optimizeFl
         y_days = pd.read_csv(y_days_path)
 
         model_days_spatial = XGBRegressor(n_estimators=400, max_depth=6, learning_rate=0.03, random_state=42)
-        model_days_spatial.fit(X_spatial, y_days)
+        #model_days_spatial.fit(X_spatial, y_days)
 
         # Train Spatial Magnitude Model
         model_mag_spatial = XGBRegressor(n_estimators=400, max_depth=5, learning_rate=0.03, random_state=42)
-        model_mag_spatial.fit(X_spatial, y_mag)
+        #model_mag_spatial.fit(X_spatial, y_mag)
+
+        from sklearn.model_selection import RandomizedSearchCV
+
+        param_distributions = {
+            'max_depth':[None],
+            'learning_rate': [0.01, 0.03, 0.1],
+            'subsample': [0.7, 0.8, 0.9],
+            'colsample_bytree': [0.7, 0.8, 0.9]
+        }
+
+        search = RandomizedSearchCV(
+            estimator=model_days_spatial,
+            param_distributions=param_distributions,
+            n_iter=10,
+            cv=3,
+            scoring='neg_mean_squared_error',
+            random_state=42,
+            n_jobs=-1
+            )
+
+        search.fit(X_spatial, y_days)
+        model_days_spatial = search.best_estimator_
+
+        search = RandomizedSearchCV(
+            estimator=model_mag_spatial,
+            param_distributions=param_distributions,
+            n_iter=10,
+            cv=3,
+            scoring='neg_mean_squared_error',
+            random_state=42,
+            n_jobs=-1
+            )
+        search.fit(X_spatial, y_mag)
+        model_mag_spatial = search.best_estimator_
 
     msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for earthquake prone locations")
     while cnt < 25:
