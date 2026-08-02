@@ -24,22 +24,58 @@ import requests
 import io
 
 url = "https://huggingface.co"
+import pandas as pd
+import requests
+import io
 
-# Download the file content into memory
+# 1. Define your file URL and token
 
-# Read the in-memory string directly as a CSV file
-storage_options = {'User-Agent': 'Mozilla/5.0'}
+hf_token="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"
+
+headers = {
+    "Authorization": f"Bearer {hf_token}",
+    "User-Agent": "Mozilla/5.0"
+}
 
 url="https://huggingface.co/datasets/hasilm1/Earthquake_PredictNextDate/tree/main/X_spatial.csv"
-X_spatial = pd.read_csv(url, sep=None, engine='python', storage_options=storage_options)
+response = requests.get(url, headers=headers)
 
+if response.status_code == 200:
+    X_spatial = pd.read_csv(io.StringIO(response.text))
+    print("Data loaded perfectly!")
+    print(df_spatial.head())
+else:
+    print(f"Failed with error code: {response.status_code}")
+    print("Server Response:", response.text)
+ 
 url="https://huggingface.co/datasets/hasilm1/Earthquake_PredictNextDate/tree/main/y_days.csv"
-y_days = pd.read_csv(url, sep=None, engine='python', storage_options=storage_options)
+response = requests.get(url, headers=headers)
+
+X_spatial = ""
+
+y_days =""
+
+y_mag = ""
+
+if response.status_code == 200:
+    y_days = pd.read_csv(io.StringIO(response.text))
+    print("Data loaded perfectly!")
+    print(df_spatial.head())
+else:
+    print(f"Failed with error code: {response.status_code}")
+    print("Server Response:", response.text)
 
 url="https://huggingface.co/datasets/hasilm1/Earthquake_PredictNextDate/tree/main/y_mag.csv"
-y_mag = pd.read_csv(url, sep=None, engine='python', storage_options=storage_options)
- 
+response = requests.get(url, headers=headers)
 
+if response.status_code == 200:
+    y_mag = pd.read_csv(io.StringIO(response.text))
+    print("Data loaded perfectly!")
+    print(df_spatial.head())
+else:
+    print(f"Failed with error code: {response.status_code}")
+    print("Server Response:", response.text)
+ 
 model_days = XGBRegressor(n_estimators=400, max_depth=6, learning_rate=0.03, random_state=42)
 model_days.fit(X_spatial, y_days)
 
