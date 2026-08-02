@@ -28,54 +28,14 @@ import pandas as pd
 import requests
 import io
 
-# 1. Define your file URL and token
+ymag_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/ymag.csv"                      # enter the Hugging Face username here
+X_spatial_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/X_spatial.csv"                    # enter the Hugging Face username here
+y_days_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/y_days.csv"                      # enter the Hugging Face username here
 
-hf_token = HfApi(token=os.getenv("HF_TOKEN"))
+y_mag = pd.read_csv(ymag_path)
+X_spatial = pd.read_csv(X_spatial_path)
+y_days = pd.read_csv(y_days_path)
 
-headers = {
-    "Authorization": f"Bearer {hf_token}",
-    "User-Agent": "Mozilla/5.0"
-}
-
-url="https://huggingface.co/datasets/hasilm1/Earthquake_PredictNextDate/tree/main/X_spatial.csv"
-response = requests.get(url, headers=headers)
-
-if response.status_code == 200:
-    X_spatial = pd.read_csv(io.StringIO(response.text))
-    print("Data loaded perfectly!")
-    print(df_spatial.head())
-else:
-    print(f"Failed with error code: {response.status_code}")
-    print("Server Response:", response.text)
- 
-url="https://huggingface.co/datasets/hasilm1/Earthquake_PredictNextDate/tree/main/y_days.csv"
-response = requests.get(url, headers=headers)
-
-X_spatial = ""
-
-y_days =""
-
-y_mag = ""
-
-if response.status_code == 200:
-    y_days = pd.read_csv(io.StringIO(response.text))
-    print("Data loaded perfectly!")
-    print(df_spatial.head())
-else:
-    print(f"Failed with error code: {response.status_code}")
-    print("Server Response:", response.text)
-
-url="https://huggingface.co/datasets/hasilm1/Earthquake_PredictNextDate/tree/main/y_mag.csv"
-response = requests.get(url, headers=headers)
-
-if response.status_code == 200:
-    y_mag = pd.read_csv(io.StringIO(response.text))
-    print("Data loaded perfectly!")
-    print(df_spatial.head())
-else:
-    print(f"Failed with error code: {response.status_code}")
-    print("Server Response:", response.text)
- 
 model_days = XGBRegressor(n_estimators=400, max_depth=6, learning_rate=0.03, random_state=42)
 model_days.fit(X_spatial, y_days)
 
