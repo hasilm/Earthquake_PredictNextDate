@@ -913,7 +913,7 @@ if st.button("click to predict"):
     
     if lat != "0.0":
         if optimizeFlag:
-            msg_textbox.warning(" optimized mode takes more time to complete.")
+            msg_textbox.warning(" RandomizedSearch mode takes more time to complete.")
         else:        
             msg_textbox.warning(" please re-try once more, something went wrong.")
         det=runModelOutput(lat,longi,grid_map_spatial,spatial_kmeans,optimizeFlag)
