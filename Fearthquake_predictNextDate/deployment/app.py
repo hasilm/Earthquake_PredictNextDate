@@ -362,6 +362,7 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,optimizeFl
         model_days_spatial = joblib.load(model_path)
         model_path = hf_hub_download(repo_id=str(HF_username)+"/"+str(App_name), filename=Model_name2) # enter the Hugging Face username here
         model_mag_spatial = joblib.load(model_path)
+        
     elif optimizeFlag == 1:
         import requests
         import io
@@ -423,8 +424,7 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,optimizeFl
         
     elif optimizeFlag == 2:
         from sklearn.ensemble import RandomForestRegressor
-        from sklearn.ensemble import RandomForestRegressor
-
+        from sklearn.model_selection import RandomizedSearchCV
 
         model_days_spatial = RandomForestRegressor(random_state=42, n_jobs=-1)
 
