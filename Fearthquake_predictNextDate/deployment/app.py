@@ -459,6 +459,27 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,optimizeFl
         rf_search.fit(X_spatial, y_days.values.ravel())
         model_days_spatial = rf_search.best_estimator_
 
+        param_distributions = {
+            'max_depth':[2,6],
+            'learning_rate': [0.01, 0.03, 0.1],
+            'subsample': [0.7, 0.8, 0.9],
+            'colsample_bytree': [0.7, 0.8, 0.9],
+           'n_estimators': [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+           }
+        
+        search = RandomizedSearchCV(
+            estimator=model_mag_spatial,
+            param_distributions=param_distributions,
+            n_iter=10,
+            cv=3,
+            scoring='neg_mean_squared_error',
+            random_state=42,
+            n_jobs=-1
+            )
+        
+        search.fit(X_spatial, y_mag)
+        model_mag_spatial = search.best_estimator_
+
     msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for earthquake prone locations")
     while cnt < 25:
         #print("stps:",stps)
