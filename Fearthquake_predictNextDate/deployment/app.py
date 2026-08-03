@@ -430,7 +430,7 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,optimizeFl
 
         param_distributions = {
             'n_estimators': [100, 200,400, 500],
-            'max_depth': [12, 16, 18]],
+            'max_depth': [12, 16, 18],
             'min_samples_split': [2,5,10],
             'min_samples_leaf': [1,2,4],
             'max_features': ['sqrt', 'log2'] # Limits features per split to avoid spatial dominance
