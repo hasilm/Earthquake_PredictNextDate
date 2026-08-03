@@ -426,6 +426,14 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,optimizeFl
         from sklearn.ensemble import RandomForestRegressor
         from sklearn.model_selection import RandomizedSearchCV
 
+        ymag_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/ymag.csv"                      # enter the Hugging Face username here
+        X_spatial_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/X_spatial.csv"                    # enter the Hugging Face username here
+        y_days_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/y_days.csv"                      # enter the Hugging Face username here
+
+        y_mag = pd.read_csv(ymag_path)
+        X_spatial = pd.read_csv(X_spatial_path)
+        y_days = pd.read_csv(y_days_path)
+
         model_days_spatial = RandomForestRegressor(random_state=42, n_jobs=-1)
 
         param_distributions = {
