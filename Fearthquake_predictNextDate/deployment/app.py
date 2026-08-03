@@ -108,7 +108,7 @@ else:
 
 modes = st.radio(
     "Select Mode",
-    options=["Normal", "RandomizedSearch"],
+    options=["Normal", "RandomizedSearch","RandomForest"],
     index=0 # Sets 'address' as the default choice
 )
 #include_stochastic = st.checkbox("RandomizedSearch mode")
@@ -353,7 +353,7 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,optimizeFl
     
     model_days_spatial=""
     model_mag_spatial=""
-    if optimizeFlag == False:
+    if optimizeFlag == 0:
         Model_name1="earthquake_predict_date_model_v1.joblib"
         Model_name2="earthquake_predict_mag_model_v1.joblib"
 
@@ -362,7 +362,7 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,optimizeFl
         model_days_spatial = joblib.load(model_path)
         model_path = hf_hub_download(repo_id=str(HF_username)+"/"+str(App_name), filename=Model_name2) # enter the Hugging Face username here
         model_mag_spatial = joblib.load(model_path)
-    else:
+    elif optimizeFlag == 1:
         import requests
         import io
 
@@ -420,6 +420,33 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,optimizeFl
             )
         search.fit(X_spatial, y_mag)
         model_mag_spatial = search.best_estimator_
+        
+    elif optimizeFlag == 2:
+        from sklearn.ensemble import RandomForestRegressor
+        from sklearn.ensemble import RandomForestRegressor
+
+
+        model_days_spatial = RandomForestRegressor(random_state=42, n_jobs=-1)
+
+        param_distributions = {
+            'n_estimators': [100, 200,400, 500],
+            'max_depth': [12, 16, 18]],
+            'min_samples_split': [2,5,10],
+            'min_samples_leaf': [1,2,4],
+            'max_features': ['sqrt', 'log2'] # Limits features per split to avoid spatial dominance
+        }
+        rf_search = RandomizedSearchCV(
+            estimator=model_days_spatial, 
+            param_distributions=param_distributions, 
+            n_iter=10, 
+            cv=3, 
+            random_state=42, 
+            n_jobs=-1,
+            scoring='neg_mean_squared_error'
+            )
+        
+        rf_search.fit(X_spatial, y_days.values.ravel())
+        model_days_spatial = rf_search.best_estimator_
 
     msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for earthquake prone locations")
     while cnt < 25:
@@ -911,16 +938,21 @@ if st.button("click to predict"):
             st.write(f" Longitude      : {text2}")
             st.write(f" Dataset Loaded : {len(df)}")
   
-    optimizeFlag=False
-    
+    optimizeFlag=0
     mode_Str="Normal"
     if modes == "RandomizedSearch":
         mode_Str="RandomizedSearch"
-        optimizeFlag=True
-    
+        optimizeFlag=1
+    elif modes == "RandomForest":
+        mode_Str="RandomForest"
+        optimizeFlag=2
+    else:
+        mode_Str="Normal"
+        optimizeFlag=0 
+        
     if lat != "0.0":
-        if optimizeFlag:
-            msg_textbox.warning(" RandomizedSearch mode takes more time to complete...please wait...")
+        if mode_Str != "Normal":
+            msg_textbox.warning(str(mode_Str)+" mode takes more time to complete...please wait...")
         else:        
             msg_textbox.warning(" please re-try once more, something went wrong.")
             
