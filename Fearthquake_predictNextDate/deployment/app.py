@@ -367,10 +367,11 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,optimizeFl
         import requests
         import io
 
-        url = "https://huggingface.co"
+        #url = "https://huggingface.co"
         import pandas as pd
-        import requests
-        import io
+        
+        #import requests
+        #import io
 
         ymag_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/ymag.csv"                      # enter the Hugging Face username here
         X_spatial_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/X_spatial.csv"                    # enter the Hugging Face username here
@@ -423,6 +424,8 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,optimizeFl
         model_mag_spatial = search.best_estimator_
         
     elif optimizeFlag == 2:
+
+        import pandas as pd
         from sklearn.ensemble import RandomForestRegressor
         from sklearn.model_selection import RandomizedSearchCV
 
