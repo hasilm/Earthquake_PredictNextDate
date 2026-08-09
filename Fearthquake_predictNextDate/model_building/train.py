@@ -35,10 +35,8 @@ ytrain_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/ytrain.csv" 
 ytest_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/ytest.csv"                      # enter the Hugging Face username here
 ymag_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/ymag.csv"                      # enter the Hugging Face username here
 
-
 X_spatial_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/X_spatial.csv"                    # enter the Hugging Face username here
 y_days_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/y_days.csv"                      # enter the Hugging Face username here
-
 df_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/df.csv"                      # enter the Hugging Face username here
 
 Xtrain = pd.read_csv(Xtrain_path)
@@ -54,12 +52,103 @@ y_mag = pd.read_csv(ymag_path)
 df=get_df
 
 # Train Spatial Timeline Model
+#Normal model
 model_days_spatial = XGBRegressor(n_estimators=400, max_depth=6, learning_rate=0.03, random_state=42)
 model_days_spatial.fit(X_spatial, y_days)
 
 # Train Spatial Magnitude Model
 model_mag_spatial = XGBRegressor(n_estimators=400, max_depth=5, learning_rate=0.03, random_state=42)
 model_mag_spatial.fit(X_spatial, y_mag)
+
+#Random Search
+from sklearn.model_selection import RandomizedSearchCV
+
+param_distributions = {
+            'max_depth':[2,6],
+            'learning_rate': [0.01, 0.03, 0.1],
+            'subsample': [0.7, 0.8, 0.9],
+            'colsample_bytree': [0.7, 0.8, 0.9],
+           'n_estimators': [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+}
+
+search = RandomizedSearchCV(
+    estimator=model_days_spatial,
+    param_distributions=param_distributions,
+    n_iter=10,
+    cv=3,
+    scoring='neg_mean_squared_error',
+    random_state=42,
+    n_jobs=-1
+    )
+
+search.fit(X_spatial, y_days)
+model_days_rs_spatial = search.best_estimator_
+
+model_mag_rs_spatial = XGBRegressor(n_estimators=400, max_depth=5, learning_rate=0.03, random_state=42)
+search = RandomizedSearchCV(
+    estimator=model_mag_spatial,
+    param_distributions=param_distributions,
+    n_iter=10,
+    cv=3,
+    scoring='neg_mean_squared_error',
+    random_state=42,
+    n_jobs=-1
+    )
+search.fit(X_spatial, y_mag)
+model_mag_rs_spatial = search.best_estimator_
+        
+#Random Forest
+from sklearn.ensemble import RandomForestRegressor
+
+#ymag_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/ymag.csv"                      # enter the Hugging Face username here
+#X_spatial_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/X_spatial.csv"                    # enter the Hugging Face username here
+#y_days_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/y_days.csv"                      # enter the Hugging Face username here
+
+#y_mag = pd.read_csv(ymag_path) 
+#X_spatial = pd.read_csv(X_spatial_path)
+#y_days = pd.read_csv(y_days_path)
+
+model_days_rf_spatial = RandomForestRegressor(random_state=42, n_jobs=-1)
+param_distributions = {
+            'n_estimators': [100, 200,400, 500],
+            'max_depth': [12, 16, 18],
+            'min_samples_split': [2,5,10],
+            'min_samples_leaf': [1,2,4],
+            'max_features': ['sqrt', 'log2'] # Limits features per split to avoid spatial dominance
+}
+rf_search = RandomizedSearchCV(
+            estimator=model_days_rf_spatial, 
+            param_distributions=param_distributions, 
+            n_iter=10, 
+            cv=3, 
+            random_state=42, 
+            n_jobs=-1,
+            scoring='neg_mean_squared_error'
+)
+        
+rf_search.fit(X_spatial, y_days.values.ravel())
+model_days_rf_spatial = rf_search.best_estimator_
+
+param_distributions = {
+            'max_depth':[2,6],
+            'learning_rate': [0.01, 0.03, 0.1],
+            'subsample': [0.7, 0.8, 0.9],
+            'colsample_bytree': [0.7, 0.8, 0.9],
+           'n_estimators': [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+}
+
+model_mag_rf_spatial = RandomForestRegressor(random_state=42, n_jobs=-1)
+search = RandomizedSearchCV(
+            estimator=model_mag_rf_spatial,
+            param_distributions=param_distributions,
+            n_iter=10,
+            cv=3,
+            scoring='neg_mean_squared_error',
+            random_state=42,
+            n_jobs=-1
+)
+search.fit(X_spatial, y_mag)
+model_mag_rf_spatial = search.best_estimator_
 
 # Save the final reference map snapshot
 grid_map_spatial = df.sort_values('time').groupby('grid_id').last().reset_index()
@@ -228,11 +317,24 @@ print(f"Mean Absolute Error (MAE): {mae:.4f}")
 print(f"Mean Squared Error (MSE): {mse:.4f}")
 print(f"R-squared ($R^2$) Score: {r2:.4f}")
 
-Model_name1="earthquake_predict_date_model_v1.joblib"
-Model_name2="earthquake_predict_mag_model_v1.joblib"
+Model_nor_name1="earthquake_predict_date_model_v1.joblib"
+Model_nor_name2="earthquake_predict_mag_model_v1.joblib"
+
+Model_rs_name1="earthquake_predict_date_rs_model_v1.joblib"
+Model_rs_name2="earthquake_predict_mag_rs_model_v1.joblib"
+
+Model_rf_name1="earthquake_predict_date_rf_model_v1.joblib"
+Model_rf_name2="earthquake_predict_mag_rf_model_v1.joblib"
+
 # Save best model
-joblib.dump(model_days_spatial, Model_name1)
-joblib.dump(model_mag_spatial, Model_name2)
+joblib.dump(model_days_spatial, Model_nor_name1)
+joblib.dump(model_mag_spatial, Model_nor_name2)
+
+joblib.dump(model_days_rs_spatial, Model_rs_name1)
+joblib.dump(model_mag_rs_spatial, Model_rs_name2)
+
+joblib.dump(model_days_rf_spatial, Model_rf_name1)
+joblib.dump(model_mag_rf_spatial, Model_rf_name2)
 
 # Upload to Hugging Face
 repo_id = str(HF_username)+"/"+str(App_name)                                         # enter the Hugging Face username here
@@ -251,16 +353,43 @@ except RepositoryNotFoundError:
 
 # create_repo("best_machine_failure_model", repo_type="model", private=False)
 api.upload_file(
-    path_or_fileobj=Model_name1,
-    path_in_repo=Model_name1,
+    path_or_fileobj=Model_nor_name1,
+    path_in_repo=Model_nor_name1,
     repo_id=repo_id,
     repo_type=repo_type,
 )
 # create_repo("best_machine_failure_model", repo_type="model", private=False)
 api.upload_file(
-    path_or_fileobj=Model_name2,
-    path_in_repo=Model_name2,
+    path_or_fileobj=Model_nor_name2,
+    path_in_repo=Model_nor_name2,
     repo_id=repo_id,
     repo_type=repo_type,
 )
- 
+ # create_repo("best_machine_failure_model", repo_type="model", private=False)
+api.upload_file(
+    path_or_fileobj=Model_rs_name1,
+    path_in_repo=Model_rs_name1,
+    repo_id=repo_id,
+    repo_type=repo_type,
+)
+# create_repo("best_machine_failure_model", repo_type="model", private=False)
+api.upload_file(
+    path_or_fileobj=Model_rs_name2,
+    path_in_repo=Model_rs_name2,
+    repo_id=repo_id,
+    repo_type=repo_type,
+)
+# create_repo("best_machine_failure_model", repo_type="model", private=False)
+api.upload_file(
+    path_or_fileobj=Model_rf_name1,
+    path_in_repo=Model_rf_name1,
+    repo_id=repo_id,
+    repo_type=repo_type,
+)
+# create_repo("best_machine_failure_model", repo_type="model", private=False)
+api.upload_file(
+    path_or_fileobj=Model_rf_name2,
+    path_in_repo=Model_rf_name2,
+    repo_id=repo_id,
+    repo_type=repo_type,
+)
