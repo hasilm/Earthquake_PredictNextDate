@@ -24,6 +24,9 @@ from xgboost import XGBRegressor
 
 from huggingface_hub import login, HfApi, create_repo
 from huggingface_hub.utils import RepositoryNotFoundError, HfHubHTTPError
+import warnings
+
+warnings.filterwarnings("ignore", category=FutureWarning, module="sklearn")
 
 api = HfApi()
 HF_username="hasilm1"
@@ -137,9 +140,7 @@ param_distributions = {
            'n_estimators': [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
 }
 
-#model_mag_rf_spatial = RandomForestRegressor(random_state=42, n_jobs=-1)
-model_mag_rf_spatial = XGBRegressor(n_estimators=400, max_depth=5, learning_rate=0.03, random_state=42)
-
+model_mag_rf_spatial = RandomForestRegressor(random_state=42, n_jobs=-1)
 search = RandomizedSearchCV(
             estimator=model_mag_rf_spatial,
             param_distributions=param_distributions,
@@ -149,7 +150,7 @@ search = RandomizedSearchCV(
             random_state=42,
             n_jobs=-1
 )
-search.fit(X_spatial, y_mag)
+search.fit(X_spatial, y_mag.values.ravel())
 model_mag_rf_spatial = search.best_estimator_
 
 # Save the final reference map snapshot
