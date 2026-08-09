@@ -364,123 +364,22 @@ def runModelOutput(latitude,longitude,grid_map_spatial,spatial_kmeans,optimizeFl
         model_mag_spatial = joblib.load(model_path)
         
     elif optimizeFlag == 1:
-        import requests
-        import io
-
-        #url = "https://huggingface.co"
-        import pandas as pd
-        
-        #import requests
-        #import io
-
-        ymag_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/ymag.csv"                      # enter the Hugging Face username here
-        X_spatial_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/X_spatial.csv"                    # enter the Hugging Face username here
-        y_days_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/y_days.csv"                      # enter the Hugging Face username here
-
-        y_mag = pd.read_csv(ymag_path)
-        X_spatial = pd.read_csv(X_spatial_path)
-        y_days = pd.read_csv(y_days_path)
-
-        model_days_spatial = XGBRegressor(n_estimators=400, max_depth=6, learning_rate=0.03, random_state=42)
-        #model_days_spatial.fit(X_spatial, y_days)
-
-        # Train Spatial Magnitude Model
-        model_mag_spatial = XGBRegressor(n_estimators=400, max_depth=5, learning_rate=0.03, random_state=42)
-        #model_mag_spatial.fit(X_spatial, y_mag)
-
-        from sklearn.model_selection import RandomizedSearchCV
-
-        param_distributions = {
-            'max_depth':[2,6],
-            'learning_rate': [0.01, 0.03, 0.1],
-            'subsample': [0.7, 0.8, 0.9],
-            'colsample_bytree': [0.7, 0.8, 0.9],
-           'n_estimators': [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
-           }
-
-        search = RandomizedSearchCV(
-            estimator=model_days_spatial,
-            param_distributions=param_distributions,
-            n_iter=10,
-            cv=3,
-            scoring='neg_mean_squared_error',
-            random_state=42,
-            n_jobs=-1
-            )
-
-        search.fit(X_spatial, y_days)
-        model_days_spatial = search.best_estimator_
-
-        search = RandomizedSearchCV(
-            estimator=model_mag_spatial,
-            param_distributions=param_distributions,
-            n_iter=10,
-            cv=3,
-            scoring='neg_mean_squared_error',
-            random_state=42,
-            n_jobs=-1
-            )
-        search.fit(X_spatial, y_mag)
-        model_mag_spatial = search.best_estimator_
-        
+        Model_rs_name1="earthquake_predict_date_rs_model_v1.joblib"
+        Model_rs_name2="earthquake_predict_mag_rs_model_v1.joblib"
+    
+        model_path = hf_hub_download(repo_id=str(HF_username)+"/"+str(App_name), filename=Model_rs_name1) # enter the Hugging Face username here
+        model_days_spatial = joblib.load(model_path)
+        model_path = hf_hub_download(repo_id=str(HF_username)+"/"+str(App_name), filename=Model_rs_name2) # enter the Hugging Face username here
+        model_mag_spatial = joblib.load(model_path)    
     elif optimizeFlag == 2:
-
-        import pandas as pd
-        from sklearn.ensemble import RandomForestRegressor
-        from sklearn.model_selection import RandomizedSearchCV
-
-        ymag_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/ymag.csv"                      # enter the Hugging Face username here
-        X_spatial_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/X_spatial.csv"                    # enter the Hugging Face username here
-        y_days_path = "hf://datasets/"+str(HF_username)+"/"+str(App_name)+"/y_days.csv"                      # enter the Hugging Face username here
-
-        y_mag = pd.read_csv(ymag_path)
-        X_spatial = pd.read_csv(X_spatial_path)
-        y_days = pd.read_csv(y_days_path)
-
-        model_days_spatial = RandomForestRegressor(random_state=42, n_jobs=-1)
-
-        param_distributions = {
-            'n_estimators': [100, 200,400, 500],
-            'max_depth': [12, 16, 18],
-            'min_samples_split': [2,5,10],
-            'min_samples_leaf': [1,2,4],
-            'max_features': ['sqrt', 'log2'] # Limits features per split to avoid spatial dominance
-        }
-        rf_search = RandomizedSearchCV(
-            estimator=model_days_spatial, 
-            param_distributions=param_distributions, 
-            n_iter=10, 
-            cv=3, 
-            random_state=42, 
-            n_jobs=-1,
-            scoring='neg_mean_squared_error'
-            )
+        Model_rf_name1="earthquake_predict_date_rf_model_v1.joblib"
+        Model_rf_name2="earthquake_predict_mag_rf_model_v1.joblib"
         
-        rf_search.fit(X_spatial, y_days.values.ravel())
-        model_days_spatial = rf_search.best_estimator_
-
-        param_distributions = {
-            'max_depth':[2,6],
-            'learning_rate': [0.01, 0.03, 0.1],
-            'subsample': [0.7, 0.8, 0.9],
-            'colsample_bytree': [0.7, 0.8, 0.9],
-           'n_estimators': [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
-           }
+        model_path = hf_hub_download(repo_id=str(HF_username)+"/"+str(App_name), filename=Model_rf_name1) # enter the Hugging Face username here
+        model_days_spatial = joblib.load(model_path)
+        model_path = hf_hub_download(repo_id=str(HF_username)+"/"+str(App_name), filename=Model_rf_name2) # enter the Hugging Face username here
+        model_mag_spatial = joblib.load(model_path)  
         
-        model_mag_spatial = XGBRegressor(n_estimators=400, max_depth=5, learning_rate=0.03, random_state=42)
-        search = RandomizedSearchCV(
-            estimator=model_mag_spatial,
-            param_distributions=param_distributions,
-            n_iter=10,
-            cv=3,
-            scoring='neg_mean_squared_error',
-            random_state=42,
-            n_jobs=-1
-            )
-        
-        search.fit(X_spatial, y_mag)
-        model_mag_spatial = search.best_estimator_
-
     msg_textbox.warning("⚠️ wait for AI model to generate output..., takes longer for earthquake prone locations")
     while cnt < 25:
         #print("stps:",stps)
