@@ -39,7 +39,9 @@ print("Dataset loaded successfully.")
 #df = df.drop(columns=['id'])
 
 # Convert time column to datetime format
-df['time'] = pd.to_datetime(df['time'])
+#df['time'] = pd.to_datetime(df['time'])
+df['time'] = pd.to_datetime(df['time'], format='ISO8601')
+
 df = df.dropna()
 #################3
 # Round to the nearest 0.5 or 1.0 degree to create spatial bins
