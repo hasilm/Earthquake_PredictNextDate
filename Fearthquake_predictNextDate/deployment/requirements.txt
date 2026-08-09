@@ -3,6 +3,5 @@ huggingface_hub==0.32.6
 streamlit==1.43.2
 joblib==1.5.1
 scikit-learn==1.5.2
-xgboost==2.0.0
 gradio
 geopy
