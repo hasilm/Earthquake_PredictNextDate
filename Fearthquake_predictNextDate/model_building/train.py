@@ -132,24 +132,27 @@ rf_search = RandomizedSearchCV(
 rf_search.fit(X_spatial, y_days.values.ravel())
 model_days_rf_spatial = rf_search.best_estimator_
 
-param_distributions = {
-            'max_depth':[2,6],
-            'learning_rate': [0.01, 0.03, 0.1],
-            'subsample': [0.7, 0.8, 0.9],
-            'colsample_bytree': [0.7, 0.8, 0.9],
-           'n_estimators': [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+param_distributions_mag = {
+            'n_estimators': [100, 200,400, 500],
+            'max_depth': [12, 16, 18],
+            'min_samples_split': [2,5,10],
+            'min_samples_leaf': [1,2,4],
+            'max_features': ['sqrt', 'log2'] # Limits features per split to avoid spatial dominance
 }
 
 model_mag_rf_spatial = RandomForestRegressor(random_state=42, n_jobs=-1)
+# Ensure this search object points specifically to param_distributions_mag
 search = RandomizedSearchCV(
-            estimator=model_mag_rf_spatial,
-            param_distributions=param_distributions,
-            n_iter=10,
-            cv=3,
-            scoring='neg_mean_squared_error',
-            random_state=42,
-            n_jobs=-1
+    estimator=model_mag_rf_spatial,
+    param_distributions=param_distributions_mag, # <- Linked to the clean RF dict
+    n_iter=10,
+    cv=3,
+    scoring='neg_mean_squared_error',
+    random_state=42,
+    n_jobs=-1
 )
+
+# Line 153 will now execute successfully without parameter mismatch
 search.fit(X_spatial, y_mag.values.ravel())
 model_mag_rf_spatial = search.best_estimator_
 
