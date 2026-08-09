@@ -137,7 +137,9 @@ param_distributions = {
            'n_estimators': [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
 }
 
-model_mag_rf_spatial = RandomForestRegressor(random_state=42, n_jobs=-1)
+#model_mag_rf_spatial = RandomForestRegressor(random_state=42, n_jobs=-1)
+model_mag_rf_spatial = XGBRegressor(n_estimators=400, max_depth=5, learning_rate=0.03, random_state=42)
+
 search = RandomizedSearchCV(
             estimator=model_mag_rf_spatial,
             param_distributions=param_distributions,
