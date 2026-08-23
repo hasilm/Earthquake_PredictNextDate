@@ -57,11 +57,11 @@ df=get_df
 # Train Spatial Timeline Model
 #Normal model
 model_days_spatial = XGBRegressor(n_estimators=1000, max_depth=6, learning_rate=0.03, random_state=42)
-#model_days_spatial.fit(X_spatial, y_days)
+model_days_spatial.fit(X_spatial, y_days)
 
 # Train Spatial Magnitude Model
-#model_mag_spatial = XGBRegressor(n_estimators=1000, max_depth=6, learning_rate=0.03, random_state=42)
-#model_mag_spatial.fit(X_spatial, y_mag)
+model_mag_spatial = XGBRegressor(n_estimators=1000, max_depth=6, learning_rate=0.03, random_state=42)
+model_mag_spatial.fit(X_spatial, y_mag)
 
 #Random Search
 from sklearn.model_selection import RandomizedSearchCV
