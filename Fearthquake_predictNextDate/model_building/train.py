@@ -25,6 +25,7 @@ from xgboost import XGBRegressor
 from huggingface_hub import login, HfApi, create_repo
 from huggingface_hub.utils import RepositoryNotFoundError, HfHubHTTPError
 import warnings
+from sklearn.model_selection import KFold
 
 warnings.filterwarnings("ignore", category=FutureWarning, module="sklearn")
 
