@@ -67,24 +67,25 @@ model_mag_spatial.fit(X_spatial, y_mag)
 from sklearn.model_selection import RandomizedSearchCV
 
 param_distributions = {
-            'max_depth':[2,6],
-            'learning_rate': [0.01, 0.03, 0.1],
-            'subsample': [0.7, 0.8, 0.9],
-            'colsample_bytree': [0.7, 0.8, 0.9],
-           'n_estimators': [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+    'n_estimators': [200,400,700,1000],
+    'learning_rate': [0.01, 0.05, 0.1, 0.2],  # Step size shrinkage to prevent shooting past patterns
+    'subsample': [0.7, 0.8, 0.9],            # Percentage of rows sampled per tree
+    'colsample_bytree': [0.7, 0.8, 0.9],     # Percentage of columns sampled per split
+    'reg_alpha': [0, 0.1, 1.0],              # L1 Regularization to prune weak splits
+    'reg_lambda': [1.0, 5.0, 10.0]           # L2 Regularization to smooth predictions
 }
-
 search = RandomizedSearchCV(
     estimator=model_days_spatial,
     param_distributions=param_distributions,
     n_iter=10,
-    cv=3,
+    cv=KFold(n_splits=3, shuffle=True, random_state=42),
     scoring='neg_mean_squared_error',
     random_state=42,
     n_jobs=-1
     )
 
-search.fit(X_spatial, y_days)
+#search.fit(X_spatial, y_days)
+search.fit(X_spatial, np.log1p(y_days.values.ravel()))
 model_days_rs_spatial = search.best_estimator_
 
 model_mag_rs_spatial = XGBRegressor(n_estimators=1000, max_depth=5, learning_rate=0.03, random_state=42)
@@ -97,7 +98,8 @@ search = RandomizedSearchCV(
     random_state=42,
     n_jobs=-1
     )
-search.fit(X_spatial, y_mag)
+#search.fit(X_spatial, y_mag)
+search.fit(X_spatial, np.log1p(y_mag.values.ravel()))
 model_mag_rs_spatial = search.best_estimator_
         
 #Random Forest
